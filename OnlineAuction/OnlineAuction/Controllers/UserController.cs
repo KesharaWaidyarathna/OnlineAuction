@@ -29,12 +29,28 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [HttpGet]
+        public HttpResponseMessage GetUser([FromBody] int id)
+        {
+            try
+            {
+                UsersDto user = UserData.GetUser(id);
+
+                return Request.CreateResponse(HttpStatusCode.OK, user);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
         [HttpPost]
         public HttpResponseMessage SaveUser([FromBody] UsersDto users)
         {
             try
             {
-                if (UserData.insertUser(users))
+                if (UserData.SaveUser(users))
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
                 }
