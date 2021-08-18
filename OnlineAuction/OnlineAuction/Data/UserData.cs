@@ -65,7 +65,7 @@ namespace OnlineAuction.Data
                 UsersDto user = new UsersDto();
                 foreach (DataRow dt in table.Rows)
                 {
-                    user.Id = (int)dt["Id"];
+                    user.Id = (int)dt["UserId"];
                     user.UserType = (int)dt["UserType"];
                     user.FirstName = (string)dt["FirstName"];
                     user.LastName = (string)dt["LastName"];
@@ -89,14 +89,24 @@ namespace OnlineAuction.Data
 
         }
 
-        public bool insertUser(UsersDto user)
+        public bool SaveUser(UsersDto user)
         {
             try
             {
                 string query = QueryManager.LoadSqlFile("InserUser", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
-                //command.Parameters.Add("@ClassName", SqlDbType.NVarChar).Value = @class.ClassName;
-                //command.Parameters.Add("@Note", SqlDbType.NVarChar).Value = @class.Note;
+                command.Parameters.Add("@UserType", SqlDbType.Int).Value = user.UserType;
+                command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
+                command.Parameters.Add("@LastName", SqlDbType.VarChar).Value = user.LastName;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
+                command.Parameters.Add("@City", SqlDbType.NVarChar).Value = user.City;
+                command.Parameters.Add("@DOB", SqlDbType.DateTime).Value = user.DOB;
+                command.Parameters.Add("@ContactNumber", SqlDbType.Int).Value = user.ContactNumber;
+                command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = user.DepositAmount;
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
+                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
+                command.Parameters.Add("@IsApproved", SqlDbType.Bit).Value = user.IsApproved;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
@@ -123,9 +133,19 @@ namespace OnlineAuction.Data
             {
                 string query = QueryManager.LoadSqlFile("UpdateUser", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
-                //command.Parameters.Add("@ClassId", SqlDbType.Int).Value = @class.ClassId;
-                //command.Parameters.Add("@ClassName", SqlDbType.NVarChar).Value = @class.ClassName;
-                //command.Parameters.Add("@Note", SqlDbType.NVarChar).Value = @class.Note;
+                command.Parameters.Add("@UserType", SqlDbType.Int).Value = user.UserType;
+                command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
+                command.Parameters.Add("@LastName", SqlDbType.VarChar).Value = user.LastName;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
+                command.Parameters.Add("@City", SqlDbType.NVarChar).Value = user.City;
+                command.Parameters.Add("@DOB", SqlDbType.DateTime).Value = user.DOB;
+                command.Parameters.Add("@ContactNumber", SqlDbType.Int).Value = user.ContactNumber;
+                command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = user.DepositAmount;
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
+                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
+                command.Parameters.Add("@IsApproved", SqlDbType.Bit).Value = user.IsApproved;
+                command.Parameters.Add("@UserId", SqlDbType.Int).Value = user.Id;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
