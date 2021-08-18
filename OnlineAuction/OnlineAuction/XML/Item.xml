@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Item>
+<GetItemList>
+SELECT * FROM [dbo].[Items]
+</GetItemList>
+<InsertItem>
+Insert Into Items Values ()
+</InsertItem>
+<GetItem>
+SELECT * FROM [dbo].[Items] where ItemId = @id
+</GetItem>
+</Item>
