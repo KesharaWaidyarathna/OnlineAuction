@@ -14,11 +14,10 @@ namespace OnlineAuction.Data
         DBconnection connection = new DBconnection();
         QueryManager QueryManager = new QueryManager();
 
-        public List<UsersDto> getUsersList()
+        public List<UsersDto> GetUsersList()
         {
             try
             {
-
                 string query = QueryManager.LoadSqlFile("GetUserList", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
@@ -53,11 +52,49 @@ namespace OnlineAuction.Data
 
         }
 
+        public UsersDto GetUser(int id)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                foreach (DataRow dt in table.Rows)
+                {
+                    user.Id = (int)dt["Id"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.Password = (string)dt["Password"];
+                    user.IsApproved = (bool)dt["IsApproved"];
+                }
+
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
         public bool insertUser(UsersDto user)
         {
             try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO [dbo].[Class]([ClassName],[Note])VALUES(@ClassName,@Note)", connection.GetConnection());
+                string query = QueryManager.LoadSqlFile("InserUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 //command.Parameters.Add("@ClassName", SqlDbType.NVarChar).Value = @class.ClassName;
                 //command.Parameters.Add("@Note", SqlDbType.NVarChar).Value = @class.Note;
 
@@ -84,7 +121,8 @@ namespace OnlineAuction.Data
         {
             try
             {
-                SqlCommand command = new SqlCommand("UPDATE [dbo].[Class] SET [ClassName] = @ClassName,[Note] = @Note WHERE ClassID=@ClassId", connection.GetConnection());
+                string query = QueryManager.LoadSqlFile("UpdateUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 //command.Parameters.Add("@ClassId", SqlDbType.Int).Value = @class.ClassId;
                 //command.Parameters.Add("@ClassName", SqlDbType.NVarChar).Value = @class.ClassName;
                 //command.Parameters.Add("@Note", SqlDbType.NVarChar).Value = @class.Note;
