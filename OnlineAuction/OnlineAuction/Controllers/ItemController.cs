@@ -8,20 +8,19 @@ using System.Web.Mvc;
 
 namespace OnlineAuction.Controllers
 {
-    public class UserController : Controller
+
+    public class ItemController : Controller
     {
-        UserData UserData = new UserData();
-        // GET: User
+        ItemData ItemData = new ItemData();
+        // GET: Item
         [HttpGet]
-        public List<UsersDto> Index()
+        public ActionResult Index()
         {
-
-
-            return UserData.GetUsersList();
+            return View();
         }
 
         [HttpPost]
-        public string UserSave(HttpRequest request)
+        public string ItemSave(HttpRequest request)
         {
             string stats = "";
 
@@ -29,7 +28,7 @@ namespace OnlineAuction.Controllers
         }
 
         [HttpPost]
-        public string UserUpdate(HttpRequest request)
+        public string ItemUpdate(HttpRequest request)
         {
             string stats = "";
 
@@ -37,9 +36,10 @@ namespace OnlineAuction.Controllers
         }
 
         [HttpGet]
-        public UsersDto GetUser(int id)
+        public ItemDto GetItem(int id)
         {
-            return UserData.GetUser(id);
+            //return UserData.GetUser(id);
         }
+
     }
 }

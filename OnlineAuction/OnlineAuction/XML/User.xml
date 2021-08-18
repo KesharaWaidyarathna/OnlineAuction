@@ -1,4 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<User>
 <GetUserList>
 SELECT * FROM [dbo].[Users]
 </GetUserList>
+<GetUser>
+SELECT * FROM [dbo].[Users] where userid=@id
+</GetUser>
+</User>
