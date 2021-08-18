@@ -3,43 +3,50 @@ using OnlineAuction.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace OnlineAuction.Controllers
 {
-    public class UserController : Controller
+    public class UserController : ApiController
     {
         UserData UserData = new UserData();
-        // GET: User
+
         [HttpGet]
-        public List<UsersDto> Index()
+        public HttpResponseMessage GetUsersList()
         {
+            try
+            {
+                List<UsersDto> users = UserData.GetUsersList();
 
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
 
-            return UserData.GetUsersList();
         }
 
         [HttpPost]
-        public string UserSave(HttpRequest request)
+        public HttpResponseMessage SaveUser([FromBody] UsersDto users)
         {
-            string stats = "";
-
-            return stats;
-        }
-
-        [HttpPost]
-        public string UserUpdate(HttpRequest request)
-        {
-            string stats = "";
-
-            return stats;
-        }
-
-        [HttpGet]
-        public UsersDto GetUser(int id)
-        {
-            return UserData.GetUser(id);
+            try
+            {
+                if (UserData.insertUser(users))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

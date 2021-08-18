@@ -1,45 +1,50 @@
-﻿using OnlineAuction.Data;
-using OnlineAuction.DTO;
+﻿using OnlineAuction.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace OnlineAuction.Controllers
 {
-
-    public class ItemController : Controller
+    public class ItemController : ApiController
     {
-        ItemData ItemData = new ItemData();
-        // GET: Item
+
         [HttpGet]
-        public ActionResult Index()
+        public HttpResponseMessage GetItemList()
         {
-            return View();
+            try
+            {
+                List<UsersDto> users = UserData.GetUsersList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
         }
 
         [HttpPost]
-        public string ItemSave(HttpRequest request)
+        public HttpResponseMessage SaveItem([FromBody] UsersDto users)
         {
-            string stats = "";
-
-            return stats;
+            try
+            {
+                if (UserData.insertUser(users))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
-
-        [HttpPost]
-        public string ItemUpdate(HttpRequest request)
-        {
-            string stats = "";
-
-            return stats;
-        }
-
-        [HttpGet]
-        public ItemDto GetItem(int id)
-        {
-            //return UserData.GetUser(id);
-        }
-
     }
 }
