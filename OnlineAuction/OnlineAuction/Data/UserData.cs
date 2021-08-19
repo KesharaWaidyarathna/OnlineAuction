@@ -27,7 +27,7 @@ namespace OnlineAuction.Data
                 foreach (DataRow dt in table.Rows)
                 {
                     UsersDto user = new UsersDto();
-                    user.Id = (int)dt["Id"];
+                    user.Id = (int)dt["UserID"];
                     user.UserType = (int)dt["UserType"];
                     user.FirstName = (string)dt["FirstName"];
                     user.LastName = (string)dt["LastName"];
@@ -65,7 +65,7 @@ namespace OnlineAuction.Data
                 UsersDto user = new UsersDto();
                 foreach (DataRow dt in table.Rows)
                 {
-                    user.Id = (int)dt["UserId"];
+                    user.Id = (int)dt["UserID"];
                     user.UserType = (int)dt["UserType"];
                     user.FirstName = (string)dt["FirstName"];
                     user.LastName = (string)dt["LastName"];
@@ -93,7 +93,7 @@ namespace OnlineAuction.Data
         {
             try
             {
-                string query = QueryManager.LoadSqlFile("InserUser", "User");
+                string query = QueryManager.LoadSqlFile("InsertUser", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@UserType", SqlDbType.Int).Value = user.UserType;
                 command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
@@ -145,7 +145,37 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
                 command.Parameters.Add("@IsApproved", SqlDbType.Bit).Value = user.IsApproved;
-                command.Parameters.Add("@UserId", SqlDbType.Int).Value = user.Id;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = user.Id;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public bool SaveUserBid(UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("InsertUserBid", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userBid.UserId;
+                command.Parameters.Add("@InspectionDate", SqlDbType.DateTime).Value = userBid.InspectionDate;
+                command.Parameters.Add("@BidValue", SqlDbType.Decimal).Value = userBid.BidValue;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)

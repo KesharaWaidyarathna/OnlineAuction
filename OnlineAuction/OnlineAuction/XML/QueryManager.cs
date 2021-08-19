@@ -23,7 +23,7 @@ namespace OnlineAuction.XML
                     XmlElement element = elt.SelectSingleNode(query) as XmlElement;
                     sqlQuery = element.InnerText;
                 }
-                sqlQuery = sqlQuery.Replace("\r\n", "");
+                sqlQuery = sqlQuery.Replace("\r\n", " ");
                 return sqlQuery;
             }catch(Exception ex)
             {

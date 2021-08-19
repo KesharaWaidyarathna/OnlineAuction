@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Item>
 <GetItemList>
-SELECT * FROM [dbo].[Items]
+SELECT * FROM [dbo].[Item]
 </GetItemList>
 <InsertItem>
-Insert Into Items Values ()
+INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@CategoryName,@Description,@Image1,@Image2, @Image3, @Image4, @Image5, @Video, @Value, @InitialBid, @SoldPrice, @SoldDate,@Location, @IsSold)
 </InsertItem>
 <GetItem>
-SELECT * FROM [dbo].[Items] where ItemId = @id
+SELECT * FROM [dbo].[Item] where ItemID = @id
 </GetItem>
 </Item>

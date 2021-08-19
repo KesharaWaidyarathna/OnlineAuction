@@ -13,6 +13,7 @@ namespace OnlineAuction.Controllers
     {
         UserData UserData = new UserData();
 
+        [Route("api/User/GetUsersList")]
         [HttpGet]
         public HttpResponseMessage GetUsersList()
         {
@@ -29,6 +30,7 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [Route("api/User/GetUser")]
         [HttpGet]
         public HttpResponseMessage GetUser([FromBody] int id)
         {
@@ -45,12 +47,34 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [Route("api/User/SaveUser")]
         [HttpPost]
         public HttpResponseMessage SaveUser([FromBody] UsersDto users)
         {
             try
             {
                 if (UserData.SaveUser(users))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/User/SaveUserBid")]
+        [HttpPost]
+        public HttpResponseMessage SaveUserBid([FromBody] UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                if (UserData.SaveUserBid(userBid))
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
                 }
