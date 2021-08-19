@@ -13,6 +13,7 @@ namespace OnlineAuction.Controllers
     {
         ItemData itemData = new ItemData();
 
+        [Route("api/Item/GetItemList")]
         [HttpGet]
         public HttpResponseMessage GetItemList()
         {
@@ -29,6 +30,7 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [Route("api/Item/GetItem")]
         [HttpGet]
         public HttpResponseMessage GetItem([FromBody] int id)
         {
@@ -45,6 +47,7 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [Route("api/Item/SaveItem")]
         [HttpPost]
         public HttpResponseMessage SaveItem([FromBody] ItemDto item)
         {

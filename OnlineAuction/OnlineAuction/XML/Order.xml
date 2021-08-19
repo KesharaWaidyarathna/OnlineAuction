@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Order>
+<InserOrderDetail>
+INSERT INTO [dbo].[OrderDetails] VALUES (@UserID,@ItemID,@Price,@Date, @DispatchDate, @DeliveryAddress,@DeliveriCharge, @City, @PickupAddress,@IsFullPaid, @IsDispatch)
+</InserOrderDetail>
+<GetOrdersList>
+SELECT * FROM [dbo].[OrderDetails]
+</GetOrdersList>
+<GetOrder>
+SELECT * FROM [dbo].[OrderDetails] WHERE OrderId=@id
+</GetOrder>
+<GetOrderByUserIdItemId>
+SELECT * FROM [dbo].[OrderDetails] WHERE UserID=@iUserID AND ItemID=@ItemID
+</GetOrderByUserIdItemId>
+<InserOrderPaymentDetail>
+INSERT INTO [dbo].[OrderPaymentDetails] VALUES (@OrderID,@UserID, @PaymentAmount, @PaymentDate)
+</InserOrderPaymentDetail>
+<GetOrderPaymentDetail>
+SELECT * FROM [dbo].[OrderPaymentDetails] WHERE OrderID=@OrderID
+</GetOrderPaymentDetail>
+</Order>

@@ -8,6 +8,7 @@ namespace OnlineAuction.DTO
     public class UserBiddingDetailsDto
     {
         public int Id { get; set; }
+        public int ItemId { get; set; }
         public int UserId { get; set; }
         public DateTime BidDate { get; set; }
         public int BidCount { get; set; }

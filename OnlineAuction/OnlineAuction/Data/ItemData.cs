@@ -29,10 +29,10 @@ namespace OnlineAuction.Data
                     ItemDto item = new ItemDto();
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
-                    item.ItemName = (string)dt["ItemName"];
+                    item.ItemName = (string)dt["Name"];
                     item.CategoryName = (string)dt["CategoryName"];
-                    item.ItemDiscription = (string)dt["ItemDiscription"];
-                    item.ItemValue = (decimal)dt["ItemValue"];
+                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemValue = (decimal)dt["Value"];
                     item.InitalBid = (decimal)dt["InitalBid"];
                     item.Image1 = (byte[])dt["Image1"];
                     item.Image2 = (byte[])dt["Image2"];
@@ -72,10 +72,10 @@ namespace OnlineAuction.Data
                 {
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
-                    item.ItemName = (string)dt["ItemName"];
+                    item.ItemName = (string)dt["Name"];
                     item.CategoryName = (string)dt["CategoryName"];
-                    item.ItemDiscription = (string)dt["ItemDiscription"];
-                    item.ItemValue = (decimal)dt["ItemValue"];
+                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemValue = (decimal)dt["Value"];
                     item.InitalBid = (decimal)dt["InitalBid"];
                     item.Image1 = (byte[])dt["Image1"];
                     item.Image2 = (byte[])dt["Image2"];
@@ -103,13 +103,13 @@ namespace OnlineAuction.Data
         {
             try
             {
-                string query = QueryManager.LoadSqlFile("InserUser", "User");
+                string query = QueryManager.LoadSqlFile("InsertItem", "Item");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@CategoryId", SqlDbType.Int).Value = item.CategoryId;
-                command.Parameters.Add("@ItemName", SqlDbType.NVarChar).Value = item.ItemName;
+                command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = item.ItemName;
                 command.Parameters.Add("@CategoryName", SqlDbType.NVarChar).Value = item.CategoryName;
-                command.Parameters.Add("@ItemDiscription", SqlDbType.NVarChar).Value = item.ItemDiscription;
-                command.Parameters.Add("@ItemValue", SqlDbType.Decimal).Value = item.ItemValue;
+                command.Parameters.Add("@Description", SqlDbType.NVarChar).Value = item.ItemDiscription;
+                command.Parameters.Add("@Value", SqlDbType.Decimal).Value = item.ItemValue;
                 command.Parameters.Add("@InitalBid", SqlDbType.Decimal).Value = item.InitalBid;
                 command.Parameters.Add("@Image1", SqlDbType.VarBinary).Value = item.Image1;
                 command.Parameters.Add("@Image2", SqlDbType.VarBinary).Value = item.Image2;
