@@ -234,5 +234,33 @@ namespace OnlineAuction.Data
             }
 
         }
+
+        public bool SwitchToSeller (int UserID)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("SwitchToSeller", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+                command.Parameters.Add("@UserType", SqlDbType.Int).Value = 2;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
     }
 }

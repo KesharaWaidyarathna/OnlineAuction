@@ -91,6 +91,27 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/User/SwitchToSeller")]
+        [HttpPost]
+        public HttpResponseMessage SwitchToSeller([FromBody] int UserId)
+        {
+            try
+            {
+                if (UserData.SwitchToSeller(UserId))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Switch to Seller successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User Switch Fail");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/User/Login")]
         [HttpGet]
         public HttpResponseMessage Login([FromBody] UsersDto user)
