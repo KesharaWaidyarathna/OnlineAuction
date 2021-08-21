@@ -32,7 +32,7 @@ namespace OnlineAuction.Data
                         item.ItemId = (int)dt["ItemId"];
                         item.CategoryId = (int)dt["CategoryId"];
                         item.ItemName = (string)dt["Name"];
-                        item.ItemDiscription = (string)dt["Discription"];
+                        item.ItemDiscription = (string)dt["Description"];
                         item.ItemValue = (decimal)dt["Value"];
                         item.Image1 = (string)dt["Image1"];
                         item.Image2 = (string)dt["Image2"];
@@ -151,7 +151,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Video", SqlDbType.NVarChar).Value = item.Video;
                 command.Parameters.Add("@Location", SqlDbType.NVarChar).Value = item.Location;
                 command.Parameters.Add("@SoldPrice", SqlDbType.Decimal).Value = 0;
-                command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = DBNull.Value;
+                command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = Convert.ToDateTime("1500-00-00 00:00:00.000");
                 command.Parameters.Add("@IsSold", SqlDbType.Bit).Value = item.IsSold;
 
 
@@ -255,7 +255,7 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemDiscription = (string)dt["Description"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
