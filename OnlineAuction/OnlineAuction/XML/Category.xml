@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Category>
+<GetCategoryList>
+SELECT * FROM [dbo].[Category]
+</GetCategoryList>
+<GetCategory>
+SELECT * FROM [dbo].[Category] WHERE CategoryID=@Id
+</GetCategory>
+<InsertCategory>
+INSERT INTO [dbo].[Category] VALUES (@Name)
+</InsertCategory>
+</Category>

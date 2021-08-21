@@ -34,13 +34,16 @@ namespace OnlineAuction.Controllers
 
         [Route("api/User/GetUser")]
         [HttpGet]
-        public HttpResponseMessage GetUser([FromBody] int id)
+        public HttpResponseMessage GetUser([FromBody] UsersDto users)
         {
             try
             {
-                UsersDto user = UserData.GetUser(id);
+                UsersDto user = UserData.GetUser(users.Id);
+                if(user!=null)
+                    return Request.CreateResponse(HttpStatusCode.OK, user);
 
-                return Request.CreateResponse(HttpStatusCode.OK, user);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"User Id Invalid");
             }
             catch (Exception ex)
             {
@@ -93,11 +96,11 @@ namespace OnlineAuction.Controllers
 
         [Route("api/User/SwitchToSeller")]
         [HttpPost]
-        public HttpResponseMessage SwitchToSeller([FromBody] int UserId)
+        public HttpResponseMessage SwitchToSeller([FromBody] UsersDto user)
         {
             try
             {
-                if (UserData.SwitchToSeller(UserId))
+                if (UserData.SwitchToSeller(user.Id))
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "User Switch to Seller successfully");
                 }
