@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using static OnlineAuction.DTO.PublicEnum;
 
 namespace OnlineAuction.Data
 {
@@ -137,7 +138,6 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
                 command.Parameters.Add("@LastName", SqlDbType.VarChar).Value = user.LastName;
                 command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
-                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
                 command.Parameters.Add("@City", SqlDbType.NVarChar).Value = user.City;
                 command.Parameters.Add("@DOB", SqlDbType.DateTime).Value = user.DOB;
                 command.Parameters.Add("@ContactNumber", SqlDbType.Int).Value = user.ContactNumber;
@@ -242,7 +242,7 @@ namespace OnlineAuction.Data
                 string query = QueryManager.LoadSqlFile("SwitchToSeller", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-                command.Parameters.Add("@UserType", SqlDbType.Int).Value = 2;
+                command.Parameters.Add("@UserType", SqlDbType.Int).Value = (int)UserType.Seller;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
