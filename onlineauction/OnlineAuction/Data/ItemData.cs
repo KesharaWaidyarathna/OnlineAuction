@@ -30,7 +30,6 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.CategoryName = (string)dt["CategoryName"];
                     item.ItemDiscription = (string)dt["Discription"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.InitalBid = (decimal)dt["InitalBid"];
@@ -71,7 +70,6 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.CategoryName = (string)dt["CategoryName"];
                     item.ItemDiscription = (string)dt["Discription"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.InitalBid = (decimal)dt["InitalBid"];
@@ -104,7 +102,6 @@ namespace OnlineAuction.Data
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@CategoryId", SqlDbType.Int).Value = item.CategoryId;
                 command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = item.ItemName;
-                command.Parameters.Add("@CategoryName", SqlDbType.NVarChar).Value = item.CategoryName;
                 command.Parameters.Add("@Description", SqlDbType.NVarChar).Value = item.ItemDiscription;
                 command.Parameters.Add("@Value", SqlDbType.Decimal).Value = item.ItemValue;
                 command.Parameters.Add("@InitialBid", SqlDbType.Decimal).Value = item.InitalBid;

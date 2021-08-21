@@ -10,7 +10,6 @@ namespace OnlineAuction.DTO
         public int ItemId { get; set; }
         public int CategoryId { get; set; }
         public string ItemName { get; set; }
-        public string CategoryName { get; set; }
         public string ItemDiscription { get; set; }
         public decimal ItemValue { get; set; }
         public decimal InitalBid { get; set; }

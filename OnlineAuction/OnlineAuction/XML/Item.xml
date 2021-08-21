@@ -4,7 +4,7 @@
 SELECT * FROM [dbo].[Item]
 </GetItemList>
 <InsertItem>
-INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@CategoryName,@Description,@Image1,@Image2, @Image3, @Video, @Value, @InitialBid, @SoldPrice, @SoldDate,@Location, @IsSold)
+INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @InitialBid, @SoldPrice, @SoldDate,@Location, @IsSold)
 </InsertItem>
 <GetItem>
 SELECT * FROM [dbo].[Item] where ItemID = @id
