@@ -128,7 +128,7 @@ namespace OnlineAuction.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id, "Valid user");
+                return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id);
             }
             catch (Exception ex)
             {
