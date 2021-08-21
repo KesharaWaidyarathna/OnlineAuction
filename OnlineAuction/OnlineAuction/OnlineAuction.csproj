@@ -183,6 +183,7 @@
     <Compile Include="Models\FeesDto.cs" />
     <Compile Include="Models\ItemBiddingDetailsDto.cs" />
     <Compile Include="Models\ItemDetailDTO.cs" />
+    <Compile Include="Models\ItemDetailListDTO.cs" />
     <Compile Include="Models\ItemDto.cs" />
     <Compile Include="Models\MainConfigurationDto.cs" />
     <Compile Include="Models\OrderDetailsDto.cs" />
