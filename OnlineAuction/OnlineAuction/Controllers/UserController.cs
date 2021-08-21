@@ -113,7 +113,7 @@ namespace OnlineAuction.Controllers
         }
 
         [Route("api/User/Login")]
-        [HttpGet]
+        [HttpPost]
         public HttpResponseMessage Login([FromBody] UsersDto user)
         {
             try
@@ -122,10 +122,10 @@ namespace OnlineAuction.Controllers
 
                 if (Authuser.Email == null)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Username Password is wrong");
+                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, user, "Valid user");
+                return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id, "Valid user");
             }
             catch (Exception ex)
             {
