@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <User>
 <GetUserList>
-SELECT * FROM [dbo].[Users]
+SELECT * FROM [dbo].[User]
 </GetUserList>
 <GetUser>
-SELECT * FROM [dbo].[Users] where UserID=@id
+SELECT * FROM [dbo].[User] where UserID=@id
 </GetUser>
 <InsertUser>
 INSERT INTO [dbo].[User] VALUES (@UserType,@FirstName, @LastName, @Address, @City, @DOB, @ContactNumber, @DepositAmount, @Email, @Password,@IsApproved)
@@ -19,9 +19,12 @@ END
 INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCount+1,@InspectionDate,0,@BidValue,0)
 </InsertUserBid>
 <UserLogin>
-SELECT * FROM [dbo].[Users] where Email=@Email AND Password=@Password
+SELECT * FROM [dbo].[User] where Email=@Email AND Password=@Password
 </UserLogin>
 <GetItemAllBids>
 select * from UserBiddingDetails where ItemID=@ItemID AND IsCanceled=0 Order BY BidValue Desc
 </GetItemAllBids>
+<SwitchToSeller>
+UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
+</SwitchToSeller>
 </User>
