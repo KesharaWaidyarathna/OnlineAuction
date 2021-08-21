@@ -32,7 +32,6 @@ namespace OnlineAuction.Data
                     item.ItemName = (string)dt["Name"];
                     item.ItemDiscription = (string)dt["Discription"];
                     item.ItemValue = (decimal)dt["Value"];
-                    item.InitalBid = (decimal)dt["InitalBid"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
                     item.Image3 = (string)dt["Image3"];
@@ -72,7 +71,6 @@ namespace OnlineAuction.Data
                     item.ItemName = (string)dt["Name"];
                     item.ItemDiscription = (string)dt["Discription"];
                     item.ItemValue = (decimal)dt["Value"];
-                    item.InitalBid = (decimal)dt["InitalBid"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
                     item.Image3 = (string)dt["Image3"];
@@ -104,7 +102,6 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = item.ItemName;
                 command.Parameters.Add("@Description", SqlDbType.NVarChar).Value = item.ItemDiscription;
                 command.Parameters.Add("@Value", SqlDbType.Decimal).Value = item.ItemValue;
-                command.Parameters.Add("@InitialBid", SqlDbType.Decimal).Value = item.InitalBid;
                 command.Parameters.Add("@Image1", SqlDbType.NVarChar).Value = item.Image1;
                 command.Parameters.Add("@Image2", SqlDbType.NVarChar).Value = item.Image2;
                 command.Parameters.Add("@Image3", SqlDbType.NVarChar).Value = item.Image3;
@@ -134,6 +131,37 @@ namespace OnlineAuction.Data
             }
         }
 
+        public bool SaveItemBiddingDetail(ItemBiddingDetailsDto itemBidding)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("InsertItemBiddingDetail", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemBidding.ItemId;
+                command.Parameters.Add("@StartingBid", SqlDbType.Bit).Value = itemBidding.StartingBid;
+                command.Parameters.Add("@StartingDate", SqlDbType.DateTime).Value = itemBidding.BidStartDate;
+                command.Parameters.Add("@EndingDate", SqlDbType.DateTime).Value = itemBidding.BidEndDate;
+                command.Parameters.Add("@InspectionStartDate", SqlDbType.DateTime).Value = itemBidding.InspectionStartDate;
+                command.Parameters.Add("@InspectionEndDate", SqlDbType.DateTime).Value = itemBidding.InspectionEndDate;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
         public List<UserBiddingDetailsDto> GetItemAllBids(int ItemID)
         {
             try

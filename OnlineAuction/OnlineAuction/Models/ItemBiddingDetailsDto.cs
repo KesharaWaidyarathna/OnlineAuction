@@ -13,6 +13,6 @@ namespace OnlineAuction.DTO
         public DateTime BidEndDate { get; set; }
         public DateTime InspectionStartDate { get; set; }
         public DateTime InspectionEndDate { get; set; }
-        public decimal HighestBid { get; set; }
+        public decimal StartingBid { get; set; }
     }
 }

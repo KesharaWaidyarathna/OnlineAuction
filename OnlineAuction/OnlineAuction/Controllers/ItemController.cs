@@ -56,13 +56,16 @@ namespace OnlineAuction.Controllers
 
         [Route("api/Item/SaveItem")]
         [HttpPost]
-        public HttpResponseMessage SaveItem([FromBody] ItemDto item)
+        public HttpResponseMessage SaveItem([FromBody] ItemDto item,ItemBiddingDetailsDto itemBidding)
         {
             try
             {
                 if (itemData.SaveItem(item))
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
+                    if(itemData.SaveItemBiddingDetail(itemBidding))
+                        return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
+
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Item details not save ");
                 }
                 else
                 {
