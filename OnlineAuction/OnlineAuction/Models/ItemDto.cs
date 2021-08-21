@@ -12,7 +12,6 @@ namespace OnlineAuction.DTO
         public string ItemName { get; set; }
         public string ItemDiscription { get; set; }
         public decimal ItemValue { get; set; }
-        public decimal InitalBid { get; set; }
         public string Image1 { get; set; }
         public string Image2 { get; set; }
         public string Image3 { get; set; }
