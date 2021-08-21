@@ -13,5 +13,11 @@ namespace OnlineAuction.DTO
             Seller=2,
             Customer=3
         }
+
+        public enum FeeType
+        {
+            Registration=1,
+            AnualFee=2
+        }
     }
 }
