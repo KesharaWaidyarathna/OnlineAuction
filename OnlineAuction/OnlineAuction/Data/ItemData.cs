@@ -89,6 +89,7 @@ namespace OnlineAuction.Data
                     item.IsSold = (bool)dt["IsSold"];
                 }
 
+                connection.closeConnection();
                 return item;
 
             }
@@ -141,6 +142,40 @@ namespace OnlineAuction.Data
             }
         }
 
+        public List<UserBiddingDetailsDto> GetItemAllBids(int ItemID)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetItemAllBids", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = ItemID;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UserBiddingDetailsDto> Bids = new List<UserBiddingDetailsDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UserBiddingDetailsDto userBidding = new UserBiddingDetailsDto();
+                    userBidding.Id = (int)dt["UserBiddingDetailId"];
+                    userBidding.ItemId = (int)dt["ItemID"];
+                    userBidding.UserId = (int)dt["UserID"];
+                    userBidding.BidDate = (DateTime)dt["BidDate"];
+                    userBidding.BidCount = (int)dt["BidCount"];
+                    userBidding.InspectionDate = (DateTime)dt["InspectionDate"];
+                    userBidding.BidValue = (decimal)dt["BidValue"];
+                    userBidding.IsIncpectionApproved = (bool)dt["IsInspectionApproved"];
+                    userBidding.IsCancelled = (bool)dt["IsCanceled"];
+
+                }
+                connection.closeConnection();
+                return Bids;
+
+            }catch(Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
 
 
     }

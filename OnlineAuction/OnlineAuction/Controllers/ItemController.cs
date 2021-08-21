@@ -6,9 +6,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace OnlineAuction.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ItemController : ApiController
     {
         ItemData itemData = new ItemData();
@@ -20,8 +22,10 @@ namespace OnlineAuction.Controllers
             try
             {
                 List<ItemDto> items = itemData.GetItemList();
+                if(items.Count>0)
+                    return Request.CreateResponse(HttpStatusCode.OK, items);
 
-                return Request.CreateResponse(HttpStatusCode.OK, items);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"No items to load");
             }
             catch (Exception ex)
             {
@@ -37,8 +41,11 @@ namespace OnlineAuction.Controllers
             try
             {
                 ItemDto item = itemData.GetItem(id);
+                if(item!=null)
+                    return Request.CreateResponse(HttpStatusCode.OK, item);
 
-                return Request.CreateResponse(HttpStatusCode.OK, item);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"Invalid ItemId");
             }
             catch (Exception ex)
             {
@@ -67,5 +74,27 @@ namespace OnlineAuction.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [Route("api/Item/GetItemAllBids")]
+        [HttpGet]
+        public HttpResponseMessage GetItemAllBids([FromBody] int ItemID)
+        {
+            try
+            {
+               List<UserBiddingDetailsDto> userBiddingDetails = itemData.GetItemAllBids(ItemID);
+               
+                if(userBiddingDetails !=null)
+                    return Request.CreateResponse(HttpStatusCode.OK, userBiddingDetails);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"Request fail");
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
     }
 }
