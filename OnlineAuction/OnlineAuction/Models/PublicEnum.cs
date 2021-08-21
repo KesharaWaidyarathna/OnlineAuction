@@ -7,7 +7,7 @@ namespace OnlineAuction.DTO
 {
     public class PublicEnum
     {
-        enum UserType
+        public enum UserType
         {
             Admin=1,
             Seller=2,
