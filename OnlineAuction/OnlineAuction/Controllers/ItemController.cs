@@ -22,9 +22,15 @@ namespace OnlineAuction.Controllers
         {
             try
             {
+                ItemDetailListDTO itemDetailList = new ItemDetailListDTO();
                 List<ItemDto> items = itemData.GetItemList();
-                if(items.Count>0)
-                    return Request.CreateResponse(HttpStatusCode.OK, items);
+                List<ItemBiddingDetailsDto> itemBiddings = itemData.GetItemBiddingDetalList();
+                if(items.Count>0 && itemBiddings.Count > 0)
+                {
+                    itemDetailList.Item = items;
+                    itemDetailList.itemBidding = itemBiddings;
+                    return Request.CreateResponse(HttpStatusCode.OK, itemDetailList);
+                }
 
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"No items to load");
             }
@@ -63,6 +69,8 @@ namespace OnlineAuction.Controllers
             {
                 if (itemData.SaveItem(itemDetail.Item))
                 {
+                    ItemDto itemId = itemData.GetLastItemId();
+                    itemDetail.itemBidding.ItemId = itemId.ItemId;
                     if(itemData.SaveItemBiddingDetail(itemDetail.itemBidding))
                         return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
 
