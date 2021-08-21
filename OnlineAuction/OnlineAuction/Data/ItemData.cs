@@ -107,7 +107,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@CategoryName", SqlDbType.NVarChar).Value = item.CategoryName;
                 command.Parameters.Add("@Description", SqlDbType.NVarChar).Value = item.ItemDiscription;
                 command.Parameters.Add("@Value", SqlDbType.Decimal).Value = item.ItemValue;
-                command.Parameters.Add("@InitalBid", SqlDbType.Decimal).Value = item.InitalBid;
+                command.Parameters.Add("@InitialBid", SqlDbType.Decimal).Value = item.InitalBid;
                 command.Parameters.Add("@Image1", SqlDbType.NVarChar).Value = item.Image1;
                 command.Parameters.Add("@Image2", SqlDbType.NVarChar).Value = item.Image2;
                 command.Parameters.Add("@Image3", SqlDbType.NVarChar).Value = item.Image3;
@@ -116,6 +116,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@SoldPrice", SqlDbType.Decimal).Value = 0;
                 command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = DBNull.Value;
                 command.Parameters.Add("@IsSold", SqlDbType.Bit).Value = item.IsSold;
+
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
