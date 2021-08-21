@@ -14,12 +14,10 @@ namespace OnlineAuction.DTO
         public string ItemDiscription { get; set; }
         public decimal ItemValue { get; set; }
         public decimal InitalBid { get; set; }
-        public byte[] Image1 { get; set; }
-        public byte[] Image2 { get; set; }
-        public byte[] Image3 { get; set; }
-        public byte[] Image4 { get; set; }
-        public byte[] Image5 { get; set; }
-        public byte[] Video { get; set; }
+        public string Image1 { get; set; }
+        public string Image2 { get; set; }
+        public string Image3 { get; set; }
+        public string Video { get; set; }
         public string Location { get; set; }
         public decimal SoldPrice { get; set; }
         public DateTime SoldDate { get; set; }

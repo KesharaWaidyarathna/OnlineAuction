@@ -75,7 +75,7 @@ namespace OnlineAuction.Data
             {
                 string query = QueryManager.LoadSqlFile("InsertCategory", "Category");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
-                command.Parameters.Add("@Name", SqlDbType.Int).Value = category.CategoryName;
+                command.Parameters.Add("@Name", SqlDbType.VarChar).Value = category.CategoryName;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
