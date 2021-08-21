@@ -111,7 +111,7 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemDiscription = (string)dt["Description"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
