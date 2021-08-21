@@ -113,7 +113,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Image3", SqlDbType.NVarChar).Value = item.Image3;
                 command.Parameters.Add("@Video", SqlDbType.NVarChar).Value = item.Video;
                 command.Parameters.Add("@Location", SqlDbType.NVarChar).Value = item.Location;
-                command.Parameters.Add("@SoldPrice", SqlDbType.Decimal).Value = item.SoldPrice;
+                command.Parameters.Add("@SoldPrice", SqlDbType.Decimal).Value = 0;
                 command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = DBNull.Value;
                 command.Parameters.Add("@IsSold", SqlDbType.Bit).Value = item.IsSold;
 
