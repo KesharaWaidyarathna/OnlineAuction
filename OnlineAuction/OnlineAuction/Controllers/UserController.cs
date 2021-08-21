@@ -99,10 +99,10 @@ namespace OnlineAuction.Controllers
 
                 if (Authuser.Email == null)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"Username Password is wrong");
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Username Password is wrong");
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, user,"Valid user");
+                return Request.CreateResponse(HttpStatusCode.OK, user, "Valid user");
             }
             catch (Exception ex)
             {

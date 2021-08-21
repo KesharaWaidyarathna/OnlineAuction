@@ -195,7 +195,6 @@ namespace OnlineAuction.Data
                 throw ex;
             }
         }
-
         public UsersDto UserLogin(UsersDto Auth)
         {
             try

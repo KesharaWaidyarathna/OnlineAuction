@@ -21,4 +21,5 @@ INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCo
 <UserLogin>
 SELECT * FROM [dbo].[Users] where Email=@Email AND Password=@Password
 </UserLogin>
+
 </User>
