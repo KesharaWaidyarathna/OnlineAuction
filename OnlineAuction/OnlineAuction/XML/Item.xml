@@ -12,4 +12,10 @@ SELECT * FROM [dbo].[Item] where ItemID = @id
 <InsertItemBiddingDetail>
 INSERT INTO [dbo].[ItemBiddingDetails] VALUES (@ItemID,@StartingBid,@StartingDate, @EndingDate,@InspectionStartDate, @InspectionEndDate)
 </InsertItemBiddingDetail>
+<GetItemBiddingList>
+SELECT * FROM [dbo].[ItemBiddingDetails]
+</GetItemBiddingList>
+<GetLastItemId>
+SELECT TOP 1 * FROM Item Order By ItemID DESC
+</GetLastItemId>
 </Item>

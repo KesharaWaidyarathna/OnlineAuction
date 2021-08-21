@@ -24,30 +24,72 @@ namespace OnlineAuction.Data
                 DataTable table = new DataTable();
                 dataAdapter.Fill(table);
                 List<ItemDto> Items = new List<ItemDto>();
-                foreach (DataRow dt in table.Rows)
+                if (table.Rows.Count > 0)
                 {
-                    ItemDto item = new ItemDto();
-                    item.ItemId = (int)dt["ItemId"];
-                    item.CategoryId = (int)dt["CategoryId"];
-                    item.ItemName = (string)dt["Name"];
-                    item.ItemDiscription = (string)dt["Discription"];
-                    item.ItemValue = (decimal)dt["Value"];
-                    item.Image1 = (string)dt["Image1"];
-                    item.Image2 = (string)dt["Image2"];
-                    item.Image3 = (string)dt["Image3"];
-                    item.Video = (string)dt["Video"];
-                    item.Location = (string)dt["Location"];
-                    item.SoldPrice = (decimal)dt["SoldPrice"];
-                    item.SoldDate = (DateTime)dt["SoldDate"];
-                    item.IsSold = (bool)dt["IsSold"];
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        ItemDto item = new ItemDto();
+                        item.ItemId = (int)dt["ItemId"];
+                        item.CategoryId = (int)dt["CategoryId"];
+                        item.ItemName = (string)dt["Name"];
+                        item.ItemDiscription = (string)dt["Discription"];
+                        item.ItemValue = (decimal)dt["Value"];
+                        item.Image1 = (string)dt["Image1"];
+                        item.Image2 = (string)dt["Image2"];
+                        item.Image3 = (string)dt["Image3"];
+                        item.Video = (string)dt["Video"];
+                        item.Location = (string)dt["Location"];
+                        item.SoldPrice = (decimal)dt["SoldPrice"];
+                        item.SoldDate = (DateTime)dt["SoldDate"];
+                        item.IsSold = (bool)dt["IsSold"];
+                        Items.Add(item);
+                    }
 
                 }
-
+                connection.closeConnection();
                 return Items;
 
             }
             catch (Exception ex)
             {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public List<ItemBiddingDetailsDto> GetItemBiddingDetalList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetItemBiddingList", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<ItemBiddingDetailsDto> itemBiddings = new List<ItemBiddingDetailsDto>();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        ItemBiddingDetailsDto itemBiddin = new ItemBiddingDetailsDto();
+                        itemBiddin.Id = (int)dt["ItemBiddingDetailId"];
+                        itemBiddin.ItemId = (int)dt["ItemID"];
+                        itemBiddin.StartingBid = (decimal)dt["StartingBid"];
+                        itemBiddin.BidStartDate = (DateTime)dt["StartingDate"];
+                        itemBiddin.BidEndDate = (DateTime)dt["EndingDate"];
+                        itemBiddin.InspectionEndDate = (DateTime)dt["InspectionStartDate"];
+                        itemBiddin.InspectionEndDate = (DateTime)dt["InspectionEndDate"];
+                        itemBiddings.Add(itemBiddin);
+                    }
+                }
+                connection.closeConnection();
+                return itemBiddings;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
                 throw ex;
             }
 
@@ -87,6 +129,7 @@ namespace OnlineAuction.Data
             }
             catch (Exception ex)
             {
+                connection.closeConnection();
                 throw ex;
             }
 
@@ -185,7 +228,7 @@ namespace OnlineAuction.Data
                     userBidding.BidValue = (decimal)dt["BidValue"];
                     userBidding.IsIncpectionApproved = (bool)dt["IsInspectionApproved"];
                     userBidding.IsCancelled = (bool)dt["IsCanceled"];
-
+                    Bids.Add(userBidding);
                 }
                 connection.closeConnection();
                 return Bids;
@@ -195,6 +238,45 @@ namespace OnlineAuction.Data
                 connection.closeConnection();
                 throw ex;
             }
+        }
+
+        public ItemDto GetLastItemId()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetLastItemId", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                ItemDto item = new ItemDto();
+                foreach (DataRow dt in table.Rows)
+                {
+                    item.ItemId = (int)dt["ItemId"];
+                    item.CategoryId = (int)dt["CategoryId"];
+                    item.ItemName = (string)dt["Name"];
+                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemValue = (decimal)dt["Value"];
+                    item.Image1 = (string)dt["Image1"];
+                    item.Image2 = (string)dt["Image2"];
+                    item.Image3 = (string)dt["Image3"];
+                    item.Video = (string)dt["Video"];
+                    item.Location = (string)dt["Location"];
+                    item.SoldPrice = (decimal)dt["SoldPrice"];
+                    item.SoldDate = (DateTime)dt["SoldDate"];
+                    item.IsSold = (bool)dt["IsSold"];
+                }
+
+                connection.closeConnection();
+                return item;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
         }
 
 
