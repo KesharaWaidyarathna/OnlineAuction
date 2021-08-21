@@ -1,5 +1,6 @@
 ﻿using OnlineAuction.Data;
 using OnlineAuction.DTO;
+using OnlineAuction.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,13 +57,13 @@ namespace OnlineAuction.Controllers
 
         [Route("api/Item/SaveItem")]
         [HttpPost]
-        public HttpResponseMessage SaveItem([FromBody] ItemDto item,ItemBiddingDetailsDto itemBidding)
+        public HttpResponseMessage SaveItem([FromBody] ItemDetailDTO itemDetail)
         {
             try
             {
-                if (itemData.SaveItem(item))
+                if (itemData.SaveItem(itemDetail.Item))
                 {
-                    if(itemData.SaveItemBiddingDetail(itemBidding))
+                    if(itemData.SaveItemBiddingDetail(itemDetail.itemBidding))
                         return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
 
                     return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Item details not save ");
