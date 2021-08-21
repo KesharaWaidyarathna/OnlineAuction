@@ -88,5 +88,27 @@ namespace OnlineAuction.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [Route("api/User/Login")]
+        [HttpGet]
+        public HttpResponseMessage Login([FromBody] UsersDto user)
+        {
+            try
+            {
+                UsersDto Authuser = UserData.UserLogin(user);
+
+                if (Authuser.Email == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Username Password is wrong");
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, user, "Valid user");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
     }
 }
