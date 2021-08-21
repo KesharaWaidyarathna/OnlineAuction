@@ -18,4 +18,7 @@ Set @BidCount=(SELECT top 1 BidCount from UserBiddingDetails WHERE ItemID=1 AND 
 END
 INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCount+1,@InspectionDate,0,@BidValue,0)
 </InsertUserBid>
+<UserLogin>
+SELECT * FROM [dbo].[Users] where Email=@Email AND Password=@Password
+</UserLogin>
 </User>

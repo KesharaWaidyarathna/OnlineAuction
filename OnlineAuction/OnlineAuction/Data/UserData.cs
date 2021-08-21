@@ -195,5 +195,45 @@ namespace OnlineAuction.Data
                 throw ex;
             }
         }
+
+        public UsersDto UserLogin(UsersDto Auth)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("UserLogin", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Auth.Email;
+                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = Auth.Password;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        user.Password = (string)dt["Password"];
+                        user.IsApproved = (bool)dt["IsApproved"];
+                    }
+                }
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }
