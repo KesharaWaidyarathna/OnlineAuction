@@ -28,6 +28,12 @@ select * from UserBiddingDetails where ItemID=@ItemID AND IsCanceled=0 Order BY 
 UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
 </SwitchToSeller>
 <SaveBlackListUser>
-INSERT INTO [dbo].[BlacklistUsers]  VALUES (@Email,@Reason, GETDATE())
+INSERT INTO [dbo].[BlacklistUsers]  VALUES (@UserID,@Email,@Reason, GETDATE())
 </SaveBlackListUser>
+<SaveBlackListUser>
+SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email=Bs.Email Where U.Email=@Email
+</SaveBlackListUser>
+<EmailValidation>
+SELECT * FROM [User] Where Email=@Email
+</EmailValidation>
 </User>

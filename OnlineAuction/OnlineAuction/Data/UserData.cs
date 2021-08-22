@@ -225,11 +225,13 @@ namespace OnlineAuction.Data
                         user.IsApproved = (bool)dt["IsApproved"];
                     }
                 }
+                connection.closeConnection();
                 return user;
 
             }
             catch (Exception ex)
             {
+                connection.closeConnection();
                 throw ex;
             }
 
@@ -269,6 +271,7 @@ namespace OnlineAuction.Data
             {
                 string query = QueryManager.LoadSqlFile("SaveBlackListUser", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.NVarChar).Value = blacklistUser.UserId;
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = blacklistUser.Email;
                 command.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = blacklistUser.Reason;
 
@@ -289,6 +292,88 @@ namespace OnlineAuction.Data
                 connection.closeConnection();
                 throw ex;
             }
+        }
+
+        public UsersDto CheckBlacklist(string Eamil)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckBlacklist", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        user.Password = (string)dt["Password"];
+                        user.IsApproved = (bool)dt["IsApproved"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public string EmailValidation(string Eamil)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("EmailValidation", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        user.Password = (string)dt["Password"];
+                        user.IsApproved = (bool)dt["IsApproved"];
+                    }
+                }
+                connection.closeConnection();
+                return user.Email;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
         }
     }
 }
