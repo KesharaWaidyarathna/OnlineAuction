@@ -58,14 +58,25 @@ namespace OnlineAuction.Controllers
         {
             try
             {
-                if (UserData.SaveUser(users))
+               UsersDto blacklistUser = UserData.CheckBlacklist(users.Email);
+                string ValidEmail = UserData.EmailValidation(users.Email);
+
+                if (blacklistUser == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                    if (!String.IsNullOrEmpty(ValidEmail))
+                    {
+                        if (UserData.SaveUser(users))
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                        }
+                        else
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                        }
+                    }
+                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Email already regisrterd ");
                 }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Blacklisted ");
             }
             catch (Exception ex)
             {
