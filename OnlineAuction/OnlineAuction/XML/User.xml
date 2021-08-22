@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <User>
 <GetUserList>
-SELECT * FROM [dbo].[User]
+SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email!=Bs.Email
 </GetUserList>
 <GetUser>
 SELECT * FROM [dbo].[User] where UserID=@id
@@ -30,9 +30,9 @@ UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
 <SaveBlackListUser>
 INSERT INTO [dbo].[BlacklistUsers]  VALUES (@UserID,@Email,@Reason, GETDATE())
 </SaveBlackListUser>
-<SaveBlackListUser>
-SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email=Bs.Email Where U.Email=@Email
-</SaveBlackListUser>
+<CheckBlacklist>
+SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email=Bs.Email Where Bs.Email=@Email
+</CheckBlacklist>
 <EmailValidation>
 SELECT * FROM [User] Where Email=@Email
 </EmailValidation>

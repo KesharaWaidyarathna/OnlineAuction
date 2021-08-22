@@ -132,14 +132,22 @@ namespace OnlineAuction.Controllers
         {
             try
             {
-                UsersDto Authuser = UserData.UserLogin(user);
-
-                if (Authuser.Email == null)
+                UsersDto blacklistUser = UserData.CheckBlacklist(user.Email);
+                if (blacklistUser == null)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
-                }
+                    UsersDto Authuser = UserData.UserLogin(user);
+                    if (Authuser.Email == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
+                    }
 
-                return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id);
+                    return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Blacklist");
+                }
+              
             }
             catch (Exception ex)
             {
