@@ -27,4 +27,7 @@ select * from UserBiddingDetails where ItemID=@ItemID AND IsCanceled=0 Order BY 
 <SwitchToSeller>
 UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
 </SwitchToSeller>
+<SaveBlackListUser>
+INSERT INTO [dbo].[BlacklistUsers]  VALUES (@Email,@Reason, GETDATE())
+</SaveBlackListUser>
 </User>
