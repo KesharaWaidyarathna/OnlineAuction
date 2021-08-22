@@ -271,7 +271,7 @@ namespace OnlineAuction.Data
             {
                 string query = QueryManager.LoadSqlFile("SaveBlackListUser", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
-                command.Parameters.Add("@UserID", SqlDbType.NVarChar).Value = blacklistUser.UserId;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = blacklistUser.Email;
                 command.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = blacklistUser.Reason;
 
