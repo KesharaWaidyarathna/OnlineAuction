@@ -262,5 +262,33 @@ namespace OnlineAuction.Data
                 throw ex;
             }
         }
+
+        public bool SaveBlackListUser(BlacklistUsersDto blacklistUser)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("SaveBlackListUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = blacklistUser.Email;
+                command.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = blacklistUser.Reason;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
     }
 }

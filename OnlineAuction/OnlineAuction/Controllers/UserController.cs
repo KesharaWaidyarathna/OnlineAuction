@@ -136,5 +136,26 @@ namespace OnlineAuction.Controllers
             }
 
         }
+
+        [Route("api/User/SaveBlackListUser")]
+        [HttpPost]
+        public HttpResponseMessage SaveBlackListUser([FromBody] BlacklistUsersDto blacklistUser)
+        {
+            try
+            {
+                if (UserData.SaveBlackListUser(blacklistUser))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Blacklist Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not Blacklist ");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

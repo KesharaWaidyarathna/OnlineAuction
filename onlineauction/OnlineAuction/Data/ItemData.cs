@@ -32,7 +32,7 @@ namespace OnlineAuction.Data
                         item.ItemId = (int)dt["ItemId"];
                         item.CategoryId = (int)dt["CategoryId"];
                         item.ItemName = (string)dt["Name"];
-                        item.ItemDiscription = (string)dt["Discription"];
+                        item.ItemDiscription = (string)dt["Description"];
                         item.ItemValue = (decimal)dt["Value"];
                         item.Image1 = (string)dt["Image1"];
                         item.Image2 = (string)dt["Image2"];
@@ -111,7 +111,7 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemDiscription = (string)dt["Description"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
@@ -151,7 +151,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Video", SqlDbType.NVarChar).Value = item.Video;
                 command.Parameters.Add("@Location", SqlDbType.NVarChar).Value = item.Location;
                 command.Parameters.Add("@SoldPrice", SqlDbType.Decimal).Value = 0;
-                command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = DBNull.Value;
+                command.Parameters.Add("@SoldDate", SqlDbType.DateTime).Value = Convert.ToDateTime("1/1/1753 12:01:00 AM");
                 command.Parameters.Add("@IsSold", SqlDbType.Bit).Value = item.IsSold;
 
 
@@ -181,7 +181,7 @@ namespace OnlineAuction.Data
                 string query = QueryManager.LoadSqlFile("InsertItemBiddingDetail", "Item");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemBidding.ItemId;
-                command.Parameters.Add("@StartingBid", SqlDbType.Bit).Value = itemBidding.StartingBid;
+                command.Parameters.Add("@StartingBid", SqlDbType.Decimal).Value = itemBidding.StartingBid;
                 command.Parameters.Add("@StartingDate", SqlDbType.DateTime).Value = itemBidding.BidStartDate;
                 command.Parameters.Add("@EndingDate", SqlDbType.DateTime).Value = itemBidding.BidEndDate;
                 command.Parameters.Add("@InspectionStartDate", SqlDbType.DateTime).Value = itemBidding.InspectionStartDate;
@@ -255,7 +255,7 @@ namespace OnlineAuction.Data
                     item.ItemId = (int)dt["ItemId"];
                     item.CategoryId = (int)dt["CategoryId"];
                     item.ItemName = (string)dt["Name"];
-                    item.ItemDiscription = (string)dt["Discription"];
+                    item.ItemDiscription = (string)dt["Description"];
                     item.ItemValue = (decimal)dt["Value"];
                     item.Image1 = (string)dt["Image1"];
                     item.Image2 = (string)dt["Image2"];
