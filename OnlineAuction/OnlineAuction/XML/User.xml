@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <User>
 <GetUserList>
-SELECT * FROM [dbo].[User]
+SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email!=Bs.Email
 </GetUserList>
 <GetUser>
 SELECT * FROM [dbo].[User] where UserID=@id
