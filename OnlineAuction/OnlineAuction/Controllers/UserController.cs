@@ -25,12 +25,123 @@ namespace OnlineAuction.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK, users);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
         }
+
+        [Route("api/User/GetUsersList/Buyers/all")]
+        [HttpGet]
+        public HttpResponseMessage GetBuyersList()
+        {
+            try
+            {
+                List<UsersDto> users = UserData.GetBuyersList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [Route("api/User/GetUsersList/Sellers/all")]
+        [HttpGet]
+        public HttpResponseMessage GetSellersList()
+        {
+            try
+            {
+                List<UsersDto> users = UserData.GetSellersList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [Route("api/User/GetUsersList/Buyers/Pending")]
+        [HttpGet]
+        public HttpResponseMessage GetBuyersPendingList()
+        {
+            try
+            {
+                List<UsersDto> users = UserData.GetBuyersPendingList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [Route("api/User/GetUsersList/Sellers/Pending")]
+        [HttpGet]
+        public HttpResponseMessage GetSellersPendingList()
+        {
+            try
+            {
+                List<UsersDto> users = UserData.GetSellersPendingList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [Route("api/User/Approve")]
+        [HttpPost]
+        public HttpResponseMessage ApproveUser(UsersDto user)
+        {
+            try
+            {
+                if (UserData.ApproveUser(user))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Buyer approve Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Buyer approve failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [Route("api/User/Reject")]
+        [HttpPost]
+        public HttpResponseMessage RejectUser(UsersDto user)
+        {
+            try
+            {
+                if (UserData.RejectUser(user))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Buyer reject Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Buyer reject failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
 
         [Route("api/User/GetUser")]
         [HttpGet]
@@ -39,11 +150,11 @@ namespace OnlineAuction.Controllers
             try
             {
                 UsersDto user = UserData.GetUser(users.Id);
-                if(user!=null)
+                if (user != null)
                     return Request.CreateResponse(HttpStatusCode.OK, user);
 
 
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"User Id Invalid");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User Id Invalid");
             }
             catch (Exception ex)
             {
@@ -58,12 +169,12 @@ namespace OnlineAuction.Controllers
         {
             try
             {
-               UsersDto blacklistUser = UserData.CheckBlacklist(users.Email);
+                UsersDto blacklistUser = UserData.CheckBlacklist(users.Email);
                 string ValidEmail = UserData.EmailValidation(users.Email);
 
-                if (blacklistUser == null)
+                if (blacklistUser.Email == null)
                 {
-                    if (!String.IsNullOrEmpty(ValidEmail))
+                    if (String.IsNullOrEmpty(ValidEmail))
                     {
                         if (UserData.SaveUser(users))
                         {
@@ -74,9 +185,15 @@ namespace OnlineAuction.Controllers
                             return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
                         }
                     }
-                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Email already regisrterd ");
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Email already regisrterd ");
+                    }
                 }
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Blacklisted ");
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Blacklisted ");
+                }
             }
             catch (Exception ex)
             {
@@ -126,6 +243,28 @@ namespace OnlineAuction.Controllers
             }
         }
 
+
+        [Route("api/User/ConfirmRegistrationPayment")]
+        [HttpPost]
+        public HttpResponseMessage ConfirmRegistrationPayment([FromBody] UsersDto user)
+        {
+            try
+            {
+                if (UserData.ConfirmRegistrationPayment(user.Id))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Registration payment confirmd successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User Registration payment confirmd");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/User/Login")]
         [HttpPost]
         public HttpResponseMessage Login([FromBody] UsersDto user)
@@ -133,21 +272,38 @@ namespace OnlineAuction.Controllers
             try
             {
                 UsersDto blacklistUser = UserData.CheckBlacklist(user.Email);
-                if (blacklistUser == null)
+                UsersDto accountApproval = UserData.CheckAccountApproval(user.Email);
+                UsersDto settleRegistationFee = UserData.CheckSettleRegistartionFee(user.Email);
+                if (blacklistUser.Email == null)
                 {
-                    UsersDto Authuser = UserData.UserLogin(user);
-                    if (Authuser.Email == null)
+                    if (accountApproval.Email != null)
                     {
-                        return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
-                    }
 
-                    return Request.CreateResponse(HttpStatusCode.OK, Authuser.Id);
+                        UsersDto Authuser = UserData.UserLogin(user);
+                        if (Authuser.Email == null)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Username Password is wrong");
+                        }
+
+                        if (settleRegistationFee.Email != null)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, Authuser);
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.Accepted, Authuser);
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, "Account is not approved");
+                    }
                 }
                 else
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "User Blacklist");
+                    return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User Blacklist");
                 }
-              
+
             }
             catch (Exception ex)
             {

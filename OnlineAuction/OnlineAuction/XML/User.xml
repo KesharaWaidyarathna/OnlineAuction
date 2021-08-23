@@ -1,39 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <User>
-<GetUserList>
-SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email!=Bs.Email
-</GetUserList>
-<GetUser>
-SELECT * FROM [dbo].[User] where UserID=@id
-</GetUser>
-<InsertUser>
-INSERT INTO [dbo].[User] VALUES (@UserType,@FirstName, @LastName, @Address, @City, @DOB, @ContactNumber, @DepositAmount, @Email, @Password,@IsApproved)
-</InsertUser>
-<InsertUserBid>
-Declare @BidCount int
-Set @BidCount=0
-IF EXISTS(SELECT top 1 BidCount from UserBiddingDetails WHERE ItemID=1 AND UserID=1 ORDER BY BidCount desc)
-BEGIN
-Set @BidCount=(SELECT top 1 BidCount from UserBiddingDetails WHERE ItemID=1 AND UserID=1 ORDER BY BidCount desc)
-END
-INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCount+1,@InspectionDate,0,@BidValue,0)
-</InsertUserBid>
-<UserLogin>
-SELECT * FROM [dbo].[User] where Email=@Email AND Password=@Password
-</UserLogin>
-<GetItemAllBids>
-select * from UserBiddingDetails where ItemID=@ItemID AND IsCanceled=0 Order BY BidValue Desc
-</GetItemAllBids>
-<SwitchToSeller>
-UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
-</SwitchToSeller>
-<SaveBlackListUser>
-INSERT INTO [dbo].[BlacklistUsers]  VALUES (@UserID,@Email,@Reason, GETDATE())
-</SaveBlackListUser>
-<CheckBlacklist>
-SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email=Bs.Email Where Bs.Email=@Email
-</CheckBlacklist>
-<EmailValidation>
-SELECT * FROM [User] Where Email=@Email
-</EmailValidation>
+	<GetUserList>
+		SELECT * FROM [User] u LEFT JOIN BlacklistUsers Bs on u.Email!=Bs.Email
+	</GetUserList>
+	<GetBuyersList>
+		SELECT * FROM [User] u WHERE u.IsBlacklisted = 'False' AND u.UserType = 3
+	</GetBuyersList>
+	<GetSellersList>
+		SELECT * FROM [User] u WHERE u.IsBlacklisted = 'False' AND u.UserType = 2
+	</GetSellersList>
+	<GetBuyersPendingList>
+		SELECT * FROM [User] u WHERE u.IsBlacklisted = 'False' AND u.IsApproved = 0 AND u.UserType = 3
+	</GetBuyersPendingList>
+
+	<GetSellersPendingList>
+		SELECT * FROM [User] u WHERE u.IsBlacklisted = 'False' AND u.IsApproved = 0 AND u.UserType = 2
+	</GetSellersPendingList>
+	<GetUser>
+		SELECT * FROM [dbo].[User] where UserID=@id
+	</GetUser>
+	<ApproveUser>
+		UPDATE [dbo].[User] SET IsApproved = 1 WHERE UserID = @UserID
+	</ApproveUser>
+	<RejectUser>
+		UPDATE [dbo].[User] SET IsApproved = 9 WHERE UserID = @UserID
+	</RejectUser>
+	<InsertUser>
+		INSERT INTO [dbo].[User] VALUES (@UserType,@FirstName, @LastName, @Address, @City, @DOB, @ContactNumber, @DepositAmount, @Email, @Password,@IsApproved)
+	</InsertUser>
+	<InsertUserBid>
+		Declare @BidCount int
+		Set @BidCount=0
+		IF EXISTS(SELECT top 1 BidCount from UserBiddingDetails WHERE ItemID=1 AND UserID=1 ORDER BY BidCount desc)
+		BEGIN
+		Set @BidCount=(SELECT top 1 BidCount from UserBiddingDetails WHERE ItemID=1 AND UserID=1 ORDER BY BidCount desc)
+		END
+		INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCount+1,@InspectionDate,0,@BidValue,0)
+	</InsertUserBid>
+	<UserLogin>
+		SELECT * FROM [dbo].[User] where Email=@Email AND Password=@Password
+	</UserLogin>
+	<GetItemAllBids>
+		select * from UserBiddingDetails where ItemID=@ItemID AND IsCanceled=0 Order BY BidValue Desc
+	</GetItemAllBids>
+	<SwitchToSeller>
+		UPDATE [dbo].[User] SET UserType=@UserType WHERE UserID=@UserID
+	</SwitchToSeller>
+	<SaveBlackListUser>
+		INSERT INTO [dbo].[BlacklistUsers]  VALUES (@UserID,@Email,@Reason, GETDATE())
+	</SaveBlackListUser>
+	<CheckBlacklist>
+		SELECT * FROM [User] u INNER JOIN BlacklistUsers Bs on u.Email=Bs.Email Where Bs.Email=@Email
+	</CheckBlacklist>
+	<EmailValidation>
+		SELECT * FROM [User] Where Email=@Email
+	</EmailValidation>
+	<CheckAccountApproval>
+		SELECT * FROM [User] u WHERE u.IsApproved = 1 AND u.Email=@Email
+	</CheckAccountApproval>
+	<CheckSettleRegistartionFee>
+		SELECT * FROM [User] u WHERE u.IsApproved = 1 AND u.IsRegisterationFeePaid = 1 AND u.Email=@Email
+	</CheckSettleRegistartionFee>
+	<ConfirmRegistrationPayment>
+		UPDATE [dbo].[User] SET IsRegisterationFeePaid = 1 WHERE UserID = @UserID
+	</ConfirmRegistrationPayment>
 </User>

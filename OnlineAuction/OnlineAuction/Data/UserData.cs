@@ -6,7 +6,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Net.Mail;
 using static OnlineAuction.DTO.PublicEnum;
+using System.Net;
+using System.Diagnostics;
 
 namespace OnlineAuction.Data
 {
@@ -39,7 +42,157 @@ namespace OnlineAuction.Data
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
                     user.Password = (string)dt["Password"];
-                    user.IsApproved = (bool)dt["IsApproved"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    Users.Add(user);
+                }
+
+                return Users;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<UsersDto> GetBuyersList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetBuyersList", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    Users.Add(user);
+                }
+
+                return Users;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<UsersDto> GetSellersList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetSellersList", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    Users.Add(user);
+                }
+                return Users;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<UsersDto> GetBuyersPendingList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetBuyersPendingList", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    Users.Add(user);
+                }
+
+                return Users;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<UsersDto> GetSellersPendingList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetSellersPendingList", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
                     Users.Add(user);
                 }
 
@@ -77,7 +230,7 @@ namespace OnlineAuction.Data
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
                     user.Password = (string)dt["Password"];
-                    user.IsApproved = (bool)dt["IsApproved"];
+                    user.IsApproved = (int)dt["IsApproved"];
                 }
 
                 return user;
@@ -87,8 +240,102 @@ namespace OnlineAuction.Data
             {
                 throw ex;
             }
-
         }
+
+        public bool ApproveUser(UsersDto user)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("ApproveUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = user.Id;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    UsersDto usersDto = this.GetUser(user.Id);
+
+                    using SmtpClient email = new SmtpClient
+                    {
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential("aseonlineauction@gmail.com", "onlineauction"),
+                        EnableSsl = true,
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                    };
+                    try
+                    {
+                        email.Send("aseonlineauction@gmail.com", usersDto.Email, "N E X T BID - Your Registration Approved!", "Your acount is now approved!! Please settle registration fee to continue.");
+                    }
+                    catch (Exception ex)
+                    {
+                        connection.closeConnection();
+                        return true;
+                    }
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public bool RejectUser(UsersDto user)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("RejectUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = user.Id;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    UsersDto usersDto = this.GetUser(user.Id);
+
+                    using SmtpClient email = new SmtpClient
+                    {
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential("aseonlineauction@gmail.com", "onlineauction"),
+                        EnableSsl = true,
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                    };
+                    try
+                    {
+                        email.Send("aseonlineauction@gmail.com", usersDto.Email, "N E X T BID - Your Registration Rejected!", "Sorry, Your acount is rejected!! Try contact us.");
+                    }
+                    catch (Exception ex)
+                    {
+                        connection.closeConnection();
+                        return true;
+                    }
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
 
         public bool SaveUser(UsersDto user)
         {
@@ -100,14 +347,13 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
                 command.Parameters.Add("@LastName", SqlDbType.VarChar).Value = user.LastName;
                 command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
-                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
                 command.Parameters.Add("@City", SqlDbType.NVarChar).Value = user.City;
                 command.Parameters.Add("@DOB", SqlDbType.DateTime).Value = user.DOB;
                 command.Parameters.Add("@ContactNumber", SqlDbType.Int).Value = user.ContactNumber;
                 command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = user.DepositAmount;
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
-                command.Parameters.Add("@IsApproved", SqlDbType.Bit).Value = user.IsApproved;
+                command.Parameters.Add("@IsApproved", SqlDbType.Int).Value = 0;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
@@ -144,7 +390,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = user.DepositAmount;
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
-                command.Parameters.Add("@IsApproved", SqlDbType.Bit).Value = user.IsApproved;
+                command.Parameters.Add("@IsApproved", SqlDbType.Int).Value = user.IsApproved;
                 command.Parameters.Add("@UserID", SqlDbType.Int).Value = user.Id;
 
                 connection.openConnection();
@@ -221,8 +467,8 @@ namespace OnlineAuction.Data
                         user.ContactNumber = (int)dt["ContactNumber"];
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
-                        user.Password = (string)dt["Password"];
-                        user.IsApproved = (bool)dt["IsApproved"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
                     }
                 }
                 connection.closeConnection();
@@ -237,7 +483,7 @@ namespace OnlineAuction.Data
 
         }
 
-        public bool SwitchToSeller (int UserID)
+        public bool SwitchToSeller(int UserID)
         {
             try
             {
@@ -245,6 +491,33 @@ namespace OnlineAuction.Data
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
                 command.Parameters.Add("@UserType", SqlDbType.Int).Value = (int)UserType.Seller;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public bool ConfirmRegistrationPayment(int UserID)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("ConfirmRegistrationPayment", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
@@ -320,7 +593,89 @@ namespace OnlineAuction.Data
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
                         user.Password = (string)dt["Password"];
-                        user.IsApproved = (bool)dt["IsApproved"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public UsersDto CheckAccountApproval(string Eamil)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckAccountApproval", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public UsersDto CheckSettleRegistartionFee(string Eamil)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckSettleRegistartionFee", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
                     }
                 }
                 connection.closeConnection();
@@ -361,7 +716,7 @@ namespace OnlineAuction.Data
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
                         user.Password = (string)dt["Password"];
-                        user.IsApproved = (bool)dt["IsApproved"];
+                        user.IsApproved = (int)dt["IsApproved"];
                     }
                 }
                 connection.closeConnection();

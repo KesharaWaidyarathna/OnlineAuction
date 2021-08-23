@@ -18,7 +18,7 @@ namespace OnlineAuction.DTO
         public decimal DepositAmount { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool IsApproved { get; set; }
+        public int IsApproved { get; set; }
 
     }
 }

@@ -31,8 +31,11 @@ namespace OnlineAuction.Controllers
                     itemDetailList.itemBidding = itemBiddings;
                     return Request.CreateResponse(HttpStatusCode.OK, itemDetailList);
                 }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No items to load");
+                }
 
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"No items to load");
             }
             catch (Exception ex)
             {
