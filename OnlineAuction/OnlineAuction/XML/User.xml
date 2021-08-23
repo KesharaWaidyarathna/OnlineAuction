@@ -26,7 +26,7 @@
 		UPDATE [dbo].[User] SET IsApproved = 9 WHERE UserID = @UserID
 	</RejectUser>
 	<InsertUser>
-		INSERT INTO [dbo].[User] VALUES (@UserType,@FirstName, @LastName, @Address, @City, @DOB, @ContactNumber, @DepositAmount, @Email, @Password,@IsApproved)
+		INSERT INTO [dbo].[User] VALUES (@UserType,@FirstName, @LastName, @Address, @City, @DOB, @ContactNumber, @DepositAmount, @Email, @Password,@IsApproved, @IsBlacklisted, @IsRegisterationFeePaid)
 	</InsertUser>
 	<InsertUserBid>
 		Declare @BidCount int
@@ -64,4 +64,13 @@
 	<ConfirmRegistrationPayment>
 		UPDATE [dbo].[User] SET IsRegisterationFeePaid = 1 WHERE UserID = @UserID
 	</ConfirmRegistrationPayment>
+	<UpdateUserBlacklisting>
+		UPDATE [dbo].[User] SET IsBlacklisted = @IsBlacklisted WHERE UserID = @UserID
+	</UpdateUserBlacklisting>
+	<GetBlackListedUsers>
+		SELECT * FROM [User] WHERE IsBlacklisted = 1;
+	</GetBlackListedUsers>
+	<RemoveBlackListUser>
+		DELETE FROM [dbo].[BlacklistUsers]  WHERE UserID = @UserID
+	</RemoveBlackListUser>
 </User>

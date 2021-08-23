@@ -19,6 +19,8 @@ namespace OnlineAuction.DTO
         public string Email { get; set; }
         public string Password { get; set; }
         public int IsApproved { get; set; }
+        public bool IsRegisterationFeePaid { get; set; }
+        public bool IsBlacklisted { get; set; }
 
     }
 }

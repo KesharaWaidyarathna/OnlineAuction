@@ -41,8 +41,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     Users.Add(user);
                 }
 
@@ -79,8 +81,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     Users.Add(user);
                 }
 
@@ -117,8 +121,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     Users.Add(user);
                 }
                 return Users;
@@ -153,8 +159,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     Users.Add(user);
                 }
 
@@ -191,8 +199,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     Users.Add(user);
                 }
 
@@ -229,8 +239,10 @@ namespace OnlineAuction.Data
                     user.ContactNumber = (int)dt["ContactNumber"];
                     user.DepositAmount = (decimal)dt["DepositAmount"];
                     user.Email = (string)dt["Email"];
-                    user.Password = (string)dt["Password"];
+                    //user.Password = (string)dt["Password"];
                     user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                 }
 
                 return user;
@@ -354,6 +366,8 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = user.Email;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = user.Password;
                 command.Parameters.Add("@IsApproved", SqlDbType.Int).Value = 0;
+                command.Parameters.Add("@IsBlacklisted", SqlDbType.Int).Value = 0;
+                command.Parameters.Add("@IsRegisterationFeePaid", SqlDbType.Int).Value = 0;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
@@ -469,6 +483,8 @@ namespace OnlineAuction.Data
                         user.Email = (string)dt["Email"];
                         //user.Password = (string)dt["Password"];
                         user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     }
                 }
                 connection.closeConnection();
@@ -552,6 +568,35 @@ namespace OnlineAuction.Data
                 if (command.ExecuteNonQuery() == 1)
                 {
                     connection.closeConnection();
+                    return this.UpdateUserBlacklisting(blacklistUser.UserId, true);
+
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public bool UpdateUserBlacklisting(int UserID, bool IsBlacklisted)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("UpdateUserBlacklisting", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@IsBlacklisted", SqlDbType.Bit).Value = IsBlacklisted;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
                     return true;
                 }
                 else
@@ -592,8 +637,10 @@ namespace OnlineAuction.Data
                         user.ContactNumber = (int)dt["ContactNumber"];
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
-                        user.Password = (string)dt["Password"];
+                        //user.Password = (string)dt["Password"];
                         user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     }
                 }
                 connection.closeConnection();
@@ -633,8 +680,10 @@ namespace OnlineAuction.Data
                         user.ContactNumber = (int)dt["ContactNumber"];
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
-                        user.Password = (string)dt["Password"];
+                        //user.Password = (string)dt["Password"];
                         user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     }
                 }
                 connection.closeConnection();
@@ -674,8 +723,10 @@ namespace OnlineAuction.Data
                         user.ContactNumber = (int)dt["ContactNumber"];
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
-                        user.Password = (string)dt["Password"];
+                        //user.Password = (string)dt["Password"];
                         user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     }
                 }
                 connection.closeConnection();
@@ -715,8 +766,10 @@ namespace OnlineAuction.Data
                         user.ContactNumber = (int)dt["ContactNumber"];
                         user.DepositAmount = (decimal)dt["DepositAmount"];
                         user.Email = (string)dt["Email"];
-                        user.Password = (string)dt["Password"];
+                        //user.Password = (string)dt["Password"];
                         user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
                     }
                 }
                 connection.closeConnection();
@@ -728,7 +781,75 @@ namespace OnlineAuction.Data
                 connection.closeConnection();
                 throw ex;
             }
-
         }
+
+        public List<UsersDto> GetBlackListedUsers()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetBlackListedUsers", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    //user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    Users.Add(user);
+                }
+
+                return Users;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool RemoveBlackListUser(BlacklistUsersDto blacklistUser)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("RemoveBlackListUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+
+                    connection.closeConnection();
+                    return this.UpdateUserBlacklisting(blacklistUser.UserId, false);
+
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
     }
 }

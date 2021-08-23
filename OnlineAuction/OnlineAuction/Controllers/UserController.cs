@@ -27,7 +27,7 @@ namespace OnlineAuction.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
 
         }
@@ -331,6 +331,44 @@ namespace OnlineAuction.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
+
+        [Route("api/User/RemoveBlackListUser")]
+        [HttpPost]
+        public HttpResponseMessage RemoveBlackListUser([FromBody] BlacklistUsersDto blacklistUser)
+        {
+            try
+            {
+                if (UserData.RemoveBlackListUser(blacklistUser))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Blacklist Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not Blacklist ");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/User/GetBlackListedUsers")]
+        [HttpGet]
+        public HttpResponseMessage GetBlackListedUsers()
+        {
+            try
+            {
+                List<UsersDto> users = UserData.GetBlackListedUsers();
+
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+
         }
     }
 }
