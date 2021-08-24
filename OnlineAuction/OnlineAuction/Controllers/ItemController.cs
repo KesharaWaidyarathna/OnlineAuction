@@ -25,7 +25,7 @@ namespace OnlineAuction.Controllers
                 ItemDetailListDTO itemDetailList = new ItemDetailListDTO();
                 List<ItemDto> items = itemData.GetItemList();
                 List<ItemBiddingDetailsDto> itemBiddings = itemData.GetItemBiddingDetalList();
-                if(items.Count>0 && itemBiddings.Count > 0)
+                if (items.Count > 0 && itemBiddings.Count > 0)
                 {
                     itemDetailList.Item = items;
                     itemDetailList.itemBidding = itemBiddings;
@@ -51,11 +51,11 @@ namespace OnlineAuction.Controllers
             try
             {
                 ItemDto item = itemData.GetItem(id);
-                if(item!=null)
+                if (item != null)
                     return Request.CreateResponse(HttpStatusCode.OK, item);
 
 
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"Invalid ItemId");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Invalid ItemId");
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace OnlineAuction.Controllers
                 {
                     ItemDto itemId = itemData.GetLastItemId();
                     itemDetail.itemBidding.ItemId = itemId.ItemId;
-                    if(itemData.SaveItemBiddingDetail(itemDetail.itemBidding))
+                    if (itemData.SaveItemBiddingDetail(itemDetail.itemBidding))
                         return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
 
                     return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Item details not save ");
@@ -90,18 +90,35 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/Item/GetHighestBid")]
+        [HttpPost]
+        public HttpResponseMessage GetHighestBid([FromBody] ItemDto itemDetail)
+        {
+            try
+            {
+                ItemBiddingDetailsDto itemBiddingDetails = itemData.GetHighestBid(itemDetail.ItemId);
+
+                return Request.CreateResponse(HttpStatusCode.OK, itemBiddingDetails.HighestBid);
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/Item/GetItemAllBids")]
         [HttpGet]
         public HttpResponseMessage GetItemAllBids([FromBody] int ItemID)
         {
             try
             {
-               List<UserBiddingDetailsDto> userBiddingDetails = itemData.GetItemAllBids(ItemID);
-               
-                if(userBiddingDetails !=null)
+                List<UserBiddingDetailsDto> userBiddingDetails = itemData.GetItemAllBids(ItemID);
+
+                if (userBiddingDetails != null)
                     return Request.CreateResponse(HttpStatusCode.OK, userBiddingDetails);
 
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"Request fail");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Request fail");
 
             }
             catch (Exception ex)

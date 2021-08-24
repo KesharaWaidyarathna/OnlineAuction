@@ -17,7 +17,7 @@ namespace OnlineAuction.Data
     {
         DBconnection connection = new DBconnection();
         QueryManager QueryManager = new QueryManager();
-
+        ItemData itemData = new ItemData();
         public List<UsersDto> GetUsersList()
         {
             try
@@ -442,7 +442,53 @@ namespace OnlineAuction.Data
                 if (command.ExecuteNonQuery() == 1)
                 {
                     connection.closeConnection();
-                    return true;
+
+                    ItemBiddingDetailsDto itemBidding = new ItemBiddingDetailsDto();
+                    itemBidding.ItemId = userBid.ItemId;
+                    itemBidding.HighestBid = userBid.BidValue;
+                    bool isUpdatedHighestBid = itemData.UpdateItemBiddingHighestBid(itemBidding);
+
+                    UserPaymentDTO userPaymentDTO = new UserPaymentDTO();
+                    userPaymentDTO.UserId = userBid.UserId;
+                    userPaymentDTO.DepositAmount = userBid.ReserveAmount;
+                    return this.UserWalletReserve(userPaymentDTO) && isUpdatedHighestBid;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+
+        public bool CancelUserBid(UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                UserBiddingDetailsDto userBiddingDetails = this.GetUserBidsByItem(userBid);
+
+                string query = QueryManager.LoadSqlFile("CancelUserBid", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userBid.UserId;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+
+                    UserPaymentDTO userPaymentDTO = new UserPaymentDTO();
+                    userPaymentDTO.UserId = userBid.UserId;
+                    userPaymentDTO.DepositAmount = userBiddingDetails.ReserveAmount;
+                    Debug.WriteLine(userBiddingDetails.ReserveAmount);
+                    return this.UserWalletTopUp(userPaymentDTO);
                 }
                 else
                 {
@@ -556,11 +602,40 @@ namespace OnlineAuction.Data
             }
         }
 
+        public bool UserWalletReserve(UserPaymentDTO paymentDTO)
+        {
+            try
+            {
+                UsersDto user = this.GetUser(paymentDTO.UserId);
+                string query = QueryManager.LoadSqlFile("UserWalletTopUp", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = Decimal.Subtract(user.DepositAmount, paymentDTO.DepositAmount);
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = paymentDTO.UserId;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public bool UserWalletTopUp(UserPaymentDTO paymentDTO)
         {
             try
             {
-                UsersDto user =  this.GetUser(paymentDTO.UserId);
+                UsersDto user = this.GetUser(paymentDTO.UserId);
                 string query = QueryManager.LoadSqlFile("UserWalletTopUp", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = Decimal.Add(paymentDTO.DepositAmount, user.DepositAmount);

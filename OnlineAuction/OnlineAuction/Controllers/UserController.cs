@@ -211,6 +211,9 @@ namespace OnlineAuction.Controllers
                 // check user wallet balance
                 UsersDto usersDto = UserData.GetUser(userBid.UserId);
 
+                Debug.WriteLine(usersDto.DepositAmount);
+                Debug.WriteLine(Decimal.Multiply(userBid.BidValue, new Decimal(0.2)));
+
                 if (usersDto.DepositAmount != 0 && Decimal.Compare(usersDto.DepositAmount, Decimal.Multiply(userBid.BidValue, new Decimal(0.2))) != -1)
                 {
                     userBid.ReserveAmount = Decimal.Multiply(userBid.BidValue, new Decimal(0.2));
@@ -227,6 +230,29 @@ namespace OnlineAuction.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.PaymentRequired, "Insuffient balance!");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/User/CancelUserBid")]
+        [HttpPost]
+        public HttpResponseMessage CancelUserBid([FromBody] UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+
+                if (UserData.CancelUserBid(userBid))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                }
+
             }
             catch (Exception ex)
             {

@@ -207,6 +207,66 @@ namespace OnlineAuction.Data
                 throw ex;
             }
         }
+
+        public bool UpdateItemBiddingHighestBid(ItemBiddingDetailsDto itemBidding)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("UpdateItemBiddingHighestBid", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemBidding.ItemId;
+                command.Parameters.Add("@HighestBid", SqlDbType.Decimal).Value = itemBidding.HighestBid;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public ItemBiddingDetailsDto GetHighestBid(int itemId)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetHighestBid", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemId;
+
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+
+                ItemBiddingDetailsDto itemBiddin = new ItemBiddingDetailsDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        itemBiddin.HighestBid = (decimal)dt["HighestBid"];
+                    }
+                }
+                connection.closeConnection();
+                return itemBiddin;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public List<UserBiddingDetailsDto> GetItemAllBids(int ItemID)
         {
             try
@@ -241,6 +301,8 @@ namespace OnlineAuction.Data
                 throw ex;
             }
         }
+
+        
 
         public ItemDto GetLastItemId()
         {

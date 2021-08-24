@@ -1,21 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Item>
-<GetItemList>
-SELECT * FROM [dbo].[Item]
-</GetItemList>
-<InsertItem>
-INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @SoldPrice, @SoldDate,@Location, @IsSold)
-</InsertItem>
-<GetItem>
-SELECT * FROM [dbo].[Item] where ItemID = @id
-</GetItem>
-<InsertItemBiddingDetail>
-	INSERT INTO [dbo].[ItemBiddingDetails] VALUES (@ItemID,@StartingBid,@StartingDate, @EndingDate,@InspectionStartDate, @InspectionEndDate, @HighestBid)
-</InsertItemBiddingDetail>
-<GetItemBiddingList>
-SELECT * FROM [dbo].[ItemBiddingDetails]
-</GetItemBiddingList>
-<GetLastItemId>
-SELECT TOP 1 * FROM Item Order By ItemID DESC
-</GetLastItemId>
+	<GetItemList>
+		SELECT * FROM [dbo].[Item]
+	</GetItemList>
+	<InsertItem>
+		INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @SoldPrice, @SoldDate,@Location, @IsSold)
+	</InsertItem>
+	<GetItem>
+		SELECT * FROM [dbo].[Item] where ItemID = @id
+	</GetItem>
+	<InsertItemBiddingDetail>
+		INSERT INTO [dbo].[ItemBiddingDetails] VALUES (@ItemID,@StartingBid,@StartingDate, @EndingDate,@InspectionStartDate, @InspectionEndDate, @HighestBid)
+	</InsertItemBiddingDetail>
+	<GetItemBiddingList>
+		SELECT * FROM [dbo].[ItemBiddingDetails]
+	</GetItemBiddingList>
+	<GetLastItemId>
+		SELECT TOP 1 * FROM Item Order By ItemID DESC
+	</GetLastItemId>
+	<UpdateItemBiddingHighestBid>
+		UPDATE [dbo].[ItemBiddingDetails] SET HighestBid = @HighestBid WHERE ItemID = @ItemID
+	</UpdateItemBiddingHighestBid>
+	<GetHighestBid>
+		SELECT * FROM [dbo].[ItemBiddingDetails] WHERE ItemID = @ItemID
+	</GetHighestBid>
 </Item>
