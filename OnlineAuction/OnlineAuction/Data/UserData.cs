@@ -473,7 +473,7 @@ namespace OnlineAuction.Data
             try
             {
                 UserBiddingDetailsDto userBiddingDetails = this.GetUserBidsByItem(userBid);
-
+                Debug.WriteLine(userBiddingDetails.BidValue);
                 string query = QueryManager.LoadSqlFile("CancelUserBid", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
@@ -482,19 +482,21 @@ namespace OnlineAuction.Data
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
                 {
+                    Debug.WriteLine("sadasd");
                     connection.closeConnection();
 
-                    UserPaymentDTO userPaymentDTO = new UserPaymentDTO();
-                    userPaymentDTO.UserId = userBid.UserId;
-                    userPaymentDTO.DepositAmount = userBiddingDetails.ReserveAmount;
 
                     ItemBiddingDetailsDto itemBiddingDetails = itemData.GetHighestBid(userBid.ItemId);
+
+                    Debug.WriteLine(Decimal.Compare(itemBiddingDetails.HighestBid, userBiddingDetails.BidValue));
                     if(Decimal.Compare(itemBiddingDetails.HighestBid, userBiddingDetails.BidValue) != -1)
                     {
                         // UPDATE HIGHEST BID TO SECOND USER
                         UserBiddingDetailsDto userBidDetail = new UserBiddingDetailsDto();
                         userBidDetail.ItemId = userBid.ItemId;
                         UserBiddingDetailsDto userBiddingDetailsDto = this.GetHighestPlacedBidByItem(userBidDetail);
+
+                        Debug.WriteLine(userBiddingDetailsDto.BidValue.Equals(Decimal.Zero));
 
                         ItemBiddingDetailsDto itemBidding = new ItemBiddingDetailsDto();
                         itemBidding.ItemId = userBid.ItemId;
@@ -509,11 +511,15 @@ namespace OnlineAuction.Data
                         }
 
                        
-                        bool isUpdatedHighestBid = itemData.UpdateItemBiddingHighestBid(itemBidding);
-
+                        itemData.UpdateItemBiddingHighestBid(itemBidding);
                     }
 
+                    UserPaymentDTO userPaymentDTO = new UserPaymentDTO();
+                    userPaymentDTO.UserId = userBid.UserId;
+                    userPaymentDTO.DepositAmount = userBiddingDetails.ReserveAmount;
+
                     return this.UserWalletTopUp(userPaymentDTO);
+
                 }
                 else
                 {
