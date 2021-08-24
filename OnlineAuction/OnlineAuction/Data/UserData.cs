@@ -487,7 +487,32 @@ namespace OnlineAuction.Data
                     UserPaymentDTO userPaymentDTO = new UserPaymentDTO();
                     userPaymentDTO.UserId = userBid.UserId;
                     userPaymentDTO.DepositAmount = userBiddingDetails.ReserveAmount;
-                    Debug.WriteLine(userBiddingDetails.ReserveAmount);
+
+                    ItemBiddingDetailsDto itemBiddingDetails = itemData.GetHighestBid(userBid.ItemId);
+                    if(Decimal.Compare(itemBiddingDetails.HighestBid, userBiddingDetails.BidValue) != -1)
+                    {
+                        // UPDATE HIGHEST BID TO SECOND USER
+                        UserBiddingDetailsDto userBidDetail = new UserBiddingDetailsDto();
+                        userBidDetail.ItemId = userBid.ItemId;
+                        UserBiddingDetailsDto userBiddingDetailsDto = this.GetHighestPlacedBidByItem(userBidDetail);
+
+                        ItemBiddingDetailsDto itemBidding = new ItemBiddingDetailsDto();
+                        itemBidding.ItemId = userBid.ItemId;
+                        if (userBiddingDetailsDto.BidValue.Equals(Decimal.Zero))
+                        {
+                            ItemBiddingDetailsDto itemBiddingDetailsDto = itemData.GetItemBiddingDetailsByItemId(userBid.ItemId);
+                            itemBidding.HighestBid = itemBiddingDetailsDto.StartingBid;
+                        }
+                        else
+                        {
+                            itemBidding.HighestBid = userBiddingDetailsDto.BidValue;
+                        }
+
+                       
+                        bool isUpdatedHighestBid = itemData.UpdateItemBiddingHighestBid(itemBidding);
+
+                    }
+
                     return this.UserWalletTopUp(userPaymentDTO);
                 }
                 else
@@ -949,6 +974,33 @@ namespace OnlineAuction.Data
                     userBiddingDetailsDto.BidDate = (DateTime)dt["BidDate"];
                     userBiddingDetailsDto.BidValue = (decimal)dt["BidValue"];
                     userBiddingDetailsDto.ReserveAmount = (decimal)dt["ReserveAmount"];
+                }
+
+                return userBiddingDetailsDto;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public UserBiddingDetailsDto GetHighestPlacedBidByItem(UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetHighestPlacedBidByItem", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
+
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UserBiddingDetailsDto userBiddingDetailsDto = new UserBiddingDetailsDto();
+                foreach (DataRow dt in table.Rows)
+                {
+                    userBiddingDetailsDto.ItemId = (int)dt["ItemID"];
+                    userBiddingDetailsDto.BidValue = (decimal)dt["BidValue"];
                 }
 
                 return userBiddingDetailsDto;

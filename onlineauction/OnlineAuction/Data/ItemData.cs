@@ -267,6 +267,38 @@ namespace OnlineAuction.Data
             }
         }
 
+        public ItemBiddingDetailsDto GetItemBiddingDetailsByItemId(int itemId)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetHighestBid", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemId;
+
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+
+                ItemBiddingDetailsDto itemBiddin = new ItemBiddingDetailsDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        itemBiddin.StartingBid = (decimal)dt["StartingBid"];
+                        itemBiddin.HighestBid = (decimal)dt["HighestBid"];
+                    }
+                }
+                connection.closeConnection();
+                return itemBiddin;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public List<UserBiddingDetailsDto> GetItemAllBids(int ItemID)
         {
             try

@@ -82,4 +82,7 @@
 	<UserWalletTopUp>
 		UPDATE [dbo].[User] SET DepositAmount = @DepositAmount WHERE UserID = @UserID
 	</UserWalletTopUp>
+	<GetHighestPlacedBidByItem>
+		SELECT ItemID, MAX(BidValue) AS BidValue FROM [OnlineAuction].[dbo].[UserBiddingDetails] WHERE ItemID = @ItemID AND IsCanceled = 0 GROUP BY ItemID
+	</GetHighestPlacedBidByItem>
 </User>
