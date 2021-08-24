@@ -213,6 +213,7 @@ namespace OnlineAuction.Controllers
 
                 if (usersDto.DepositAmount != 0 && Decimal.Compare(usersDto.DepositAmount, Decimal.Multiply(userBid.BidValue, new Decimal(0.2))) != -1)
                 {
+                    userBid.ReserveAmount = Decimal.Multiply(userBid.BidValue, new Decimal(0.2));
                     if (UserData.SaveUserBid(userBid))
                     {
                         return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
@@ -226,6 +227,21 @@ namespace OnlineAuction.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.PaymentRequired, "Insuffient balance!");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/User/GetUserBidsByItem")]
+        [HttpPost]
+        public HttpResponseMessage GetUserBidsByItem([FromBody] UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                UserBiddingDetailsDto userBiddingDetails = UserData.GetUserBidsByItem(userBid);
+                return Request.CreateResponse(HttpStatusCode.OK, userBiddingDetails);
             }
             catch (Exception ex)
             {

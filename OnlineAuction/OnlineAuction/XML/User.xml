@@ -37,6 +37,9 @@
 		END
 		INSERT INTO [dbo].[UserBiddingDetails] VALUES (@ItemID,@UserID, GETDATE(),@BidCount+1, GETDATE(),0,@BidValue,0, @ReserveAmount)
 	</InsertUserBid>
+	<GetUserBidsByItem>
+		SELECT * FROM [dbo].[UserBiddingDetails] WHERE IsCanceled = 0 AND UserID = @UserID AND ItemID = @ItemID
+	</GetUserBidsByItem>
 	<UserLogin>
 		SELECT * FROM [dbo].[User] where Email=@Email AND Password=@Password
 	</UserLogin>

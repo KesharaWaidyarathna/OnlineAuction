@@ -853,6 +853,38 @@ namespace OnlineAuction.Data
             }
         }
 
+        public UserBiddingDetailsDto GetUserBidsByItem(UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetUserBidsByItem", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userBid.UserId;
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UserBiddingDetailsDto userBiddingDetailsDto = new UserBiddingDetailsDto();
+                foreach (DataRow dt in table.Rows)
+                {
+                    userBiddingDetailsDto.Id = (int)dt["UserBiddingDetailId"];
+                    userBiddingDetailsDto.ItemId = (int)dt["ItemID"];
+                    userBiddingDetailsDto.UserId = (int)dt["UserID"];
+                    userBiddingDetailsDto.BidDate = (DateTime)dt["BidDate"];
+                    userBiddingDetailsDto.BidValue = (decimal)dt["BidValue"];
+                    userBiddingDetailsDto.ReserveAmount = (decimal)dt["ReserveAmount"];
+                }
+
+                return userBiddingDetailsDto;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public bool RemoveBlackListUser(BlacklistUsersDto blacklistUser)
         {
             try
