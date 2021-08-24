@@ -194,6 +194,7 @@
     <Compile Include="Models\UncommittedPaymentDetailsDto.cs" />
     <Compile Include="Models\UserBiddingDetailsDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
+    <Compile Include="Models\UserPaymentDTO.cs" />
     <Compile Include="Models\UsersDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XML\QueryManager.cs" />

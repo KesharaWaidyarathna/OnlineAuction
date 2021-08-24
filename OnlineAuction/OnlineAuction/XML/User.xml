@@ -73,4 +73,7 @@
 	<RemoveBlackListUser>
 		DELETE FROM [dbo].[BlacklistUsers]  WHERE UserID = @UserID
 	</RemoveBlackListUser>
+	<UserWalletTopUp>
+		UPDATE [dbo].[User] SET DepositAmount = @DepositAmount WHERE UserID = @UserID
+	</UserWalletTopUp>
 </User>

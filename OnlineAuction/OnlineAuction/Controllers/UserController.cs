@@ -145,7 +145,7 @@ namespace OnlineAuction.Controllers
 
 
         [Route("api/User/GetUser")]
-        [HttpGet]
+        [HttpPost]
         public HttpResponseMessage GetUser([FromBody] UsersDto users)
         {
             try
@@ -268,6 +268,27 @@ namespace OnlineAuction.Controllers
                 else
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User Registration payment confirmd");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/User/Wallet/TopUp")]
+        [HttpPost]
+        public HttpResponseMessage UserWalletTopUp([FromBody] UserPaymentDTO paymentDTO)
+        {
+            try
+            {
+                if (UserData.UserWalletTopUp(paymentDTO))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Deposit amount updated!");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User");
                 }
             }
             catch (Exception ex)

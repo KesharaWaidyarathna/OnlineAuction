@@ -456,402 +456,431 @@ namespace OnlineAuction.Data
                 connection.closeConnection();
                 throw ex;
             }
-}
-public UsersDto UserLogin(UsersDto Auth)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("UserLogin", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Auth.Email;
-        command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = Auth.Password;
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        UsersDto user = new UsersDto();
-        if (table.Rows.Count > 0)
+        }
+        public UsersDto UserLogin(UsersDto Auth)
         {
-            foreach (DataRow dt in table.Rows)
+            try
             {
-                user.Id = (int)dt["UserID"];
-                user.UserType = (int)dt["UserType"];
-                user.FirstName = (string)dt["FirstName"];
-                user.LastName = (string)dt["LastName"];
-                user.Address = (string)dt["Address"];
-                user.City = (string)dt["City"];
-                user.DOB = (DateTime)dt["DOB"];
-                user.ContactNumber = (int)dt["ContactNumber"];
-                user.DepositAmount = (decimal)dt["DepositAmount"];
-                user.Email = (string)dt["Email"];
-                //user.Password = (string)dt["Password"];
-                user.IsApproved = (int)dt["IsApproved"];
-                user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-                user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                string query = QueryManager.LoadSqlFile("UserLogin", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Auth.Email;
+                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = Auth.Password;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public bool SwitchToSeller(int UserID)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("SwitchToSeller", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+                command.Parameters.Add("@UserType", SqlDbType.Int).Value = (int)UserType.Seller;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
             }
         }
-        connection.closeConnection();
-        return user;
 
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-
-}
-
-public bool SwitchToSeller(int UserID)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("SwitchToSeller", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-        command.Parameters.Add("@UserType", SqlDbType.Int).Value = (int)UserType.Seller;
-
-        connection.openConnection();
-        if (command.ExecuteNonQuery() == 1)
+        public bool ConfirmRegistrationPayment(int UserID)
         {
-            connection.closeConnection();
-            return true;
-        }
-        else
-        {
-            connection.closeConnection();
-            return false;
-        }
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
-
-public bool ConfirmRegistrationPayment(int UserID)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("ConfirmRegistrationPayment", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-
-        connection.openConnection();
-        if (command.ExecuteNonQuery() == 1)
-        {
-            connection.closeConnection();
-            return true;
-        }
-        else
-        {
-            connection.closeConnection();
-            return false;
-        }
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
-
-public bool SaveBlackListUser(BlacklistUsersDto blacklistUser)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("SaveBlackListUser", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = blacklistUser.Email;
-        command.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = blacklistUser.Reason;
-
-        connection.openConnection();
-        if (command.ExecuteNonQuery() == 1)
-        {
-            connection.closeConnection();
-            return this.UpdateUserBlacklisting(blacklistUser.UserId, true);
-
-        }
-        else
-        {
-            connection.closeConnection();
-            return false;
-        }
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
-
-public bool UpdateUserBlacklisting(int UserID, bool IsBlacklisted)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("UpdateUserBlacklisting", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@IsBlacklisted", SqlDbType.Bit).Value = IsBlacklisted;
-        command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-
-        connection.openConnection();
-        if (command.ExecuteNonQuery() == 1)
-        {
-            connection.closeConnection();
-            return true;
-        }
-        else
-        {
-            connection.closeConnection();
-            return false;
-        }
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
-
-public UsersDto CheckBlacklist(string Eamil)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("CheckBlacklist", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        UsersDto user = new UsersDto();
-        if (table.Rows.Count > 0)
-        {
-            foreach (DataRow dt in table.Rows)
+            try
             {
-                user.Id = (int)dt["UserID"];
-                user.UserType = (int)dt["UserType"];
-                user.FirstName = (string)dt["FirstName"];
-                user.LastName = (string)dt["LastName"];
-                user.Address = (string)dt["Address"];
-                user.City = (string)dt["City"];
-                user.DOB = (DateTime)dt["DOB"];
-                user.ContactNumber = (int)dt["ContactNumber"];
-                user.DepositAmount = (decimal)dt["DepositAmount"];
-                user.Email = (string)dt["Email"];
-                //user.Password = (string)dt["Password"];
-                user.IsApproved = (int)dt["IsApproved"];
-                user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-                user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                string query = QueryManager.LoadSqlFile("ConfirmRegistrationPayment", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
             }
         }
-        connection.closeConnection();
-        return user;
 
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-
-}
-
-public UsersDto CheckAccountApproval(string Eamil)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("CheckAccountApproval", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        UsersDto user = new UsersDto();
-        if (table.Rows.Count > 0)
+        public bool UserWalletTopUp(UserPaymentDTO paymentDTO)
         {
-            foreach (DataRow dt in table.Rows)
+            try
             {
-                user.Id = (int)dt["UserID"];
-                user.UserType = (int)dt["UserType"];
-                user.FirstName = (string)dt["FirstName"];
-                user.LastName = (string)dt["LastName"];
-                user.Address = (string)dt["Address"];
-                user.City = (string)dt["City"];
-                user.DOB = (DateTime)dt["DOB"];
-                user.ContactNumber = (int)dt["ContactNumber"];
-                user.DepositAmount = (decimal)dt["DepositAmount"];
-                user.Email = (string)dt["Email"];
-                //user.Password = (string)dt["Password"];
-                user.IsApproved = (int)dt["IsApproved"];
-                user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-                user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                UsersDto user =  this.GetUser(paymentDTO.UserId);
+                string query = QueryManager.LoadSqlFile("UserWalletTopUp", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@DepositAmount", SqlDbType.Decimal).Value = Decimal.Add(paymentDTO.DepositAmount, user.DepositAmount);
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = paymentDTO.UserId;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
             }
         }
-        connection.closeConnection();
-        return user;
 
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-
-}
-
-public UsersDto CheckSettleRegistartionFee(string Eamil)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("CheckSettleRegistartionFee", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        UsersDto user = new UsersDto();
-        if (table.Rows.Count > 0)
+        public bool SaveBlackListUser(BlacklistUsersDto blacklistUser)
         {
-            foreach (DataRow dt in table.Rows)
+            try
             {
-                user.Id = (int)dt["UserID"];
-                user.UserType = (int)dt["UserType"];
-                user.FirstName = (string)dt["FirstName"];
-                user.LastName = (string)dt["LastName"];
-                user.Address = (string)dt["Address"];
-                user.City = (string)dt["City"];
-                user.DOB = (DateTime)dt["DOB"];
-                user.ContactNumber = (int)dt["ContactNumber"];
-                user.DepositAmount = (decimal)dt["DepositAmount"];
-                user.Email = (string)dt["Email"];
-                //user.Password = (string)dt["Password"];
-                user.IsApproved = (int)dt["IsApproved"];
-                user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-                user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                string query = QueryManager.LoadSqlFile("SaveBlackListUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = blacklistUser.Email;
+                command.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = blacklistUser.Reason;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return this.UpdateUserBlacklisting(blacklistUser.UserId, true);
+
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
             }
         }
-        connection.closeConnection();
-        return user;
 
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-
-}
-
-public string EmailValidation(string Eamil)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("EmailValidation", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        UsersDto user = new UsersDto();
-        if (table.Rows.Count > 0)
+        public bool UpdateUserBlacklisting(int UserID, bool IsBlacklisted)
         {
-            foreach (DataRow dt in table.Rows)
+            try
             {
-                user.Id = (int)dt["UserID"];
-                user.UserType = (int)dt["UserType"];
-                user.FirstName = (string)dt["FirstName"];
-                user.LastName = (string)dt["LastName"];
-                user.Address = (string)dt["Address"];
-                user.City = (string)dt["City"];
-                user.DOB = (DateTime)dt["DOB"];
-                user.ContactNumber = (int)dt["ContactNumber"];
-                user.DepositAmount = (decimal)dt["DepositAmount"];
-                user.Email = (string)dt["Email"];
-                //user.Password = (string)dt["Password"];
-                user.IsApproved = (int)dt["IsApproved"];
-                user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-                user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                string query = QueryManager.LoadSqlFile("UpdateUserBlacklisting", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@IsBlacklisted", SqlDbType.Bit).Value = IsBlacklisted;
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
             }
         }
-        connection.closeConnection();
-        return user.Email;
 
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
-
-public List<UsersDto> GetBlackListedUsers()
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("GetBlackListedUsers", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        DataTable table = new DataTable();
-        dataAdapter.Fill(table);
-        List<UsersDto> Users = new List<UsersDto>();
-        foreach (DataRow dt in table.Rows)
+        public UsersDto CheckBlacklist(string Eamil)
         {
-            UsersDto user = new UsersDto();
-            user.Id = (int)dt["UserID"];
-            user.UserType = (int)dt["UserType"];
-            user.FirstName = (string)dt["FirstName"];
-            user.LastName = (string)dt["LastName"];
-            user.Address = (string)dt["Address"];
-            user.City = (string)dt["City"];
-            user.DOB = (DateTime)dt["DOB"];
-            user.ContactNumber = (int)dt["ContactNumber"];
-            user.DepositAmount = (decimal)dt["DepositAmount"];
-            user.Email = (string)dt["Email"];
-            //user.Password = (string)dt["Password"];
-            user.IsApproved = (int)dt["IsApproved"];
-            user.IsBlacklisted = (bool)dt["IsBlacklisted"];
-            user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
-            Users.Add(user);
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckBlacklist", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
         }
 
-        return Users;
-
-    }
-    catch (Exception ex)
-    {
-        throw ex;
-    }
-}
-
-public bool RemoveBlackListUser(BlacklistUsersDto blacklistUser)
-{
-    try
-    {
-        string query = QueryManager.LoadSqlFile("RemoveBlackListUser", "User");
-        SqlCommand command = new SqlCommand(query, connection.GetConnection());
-        command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
-
-        connection.openConnection();
-        if (command.ExecuteNonQuery() == 1)
+        public UsersDto CheckAccountApproval(string Eamil)
         {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckAccountApproval", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
 
-            connection.closeConnection();
-            return this.UpdateUserBlacklisting(blacklistUser.UserId, false);
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
 
         }
-        else
+
+        public UsersDto CheckSettleRegistartionFee(string Eamil)
         {
-            connection.closeConnection();
-            return false;
+            try
+            {
+                string query = QueryManager.LoadSqlFile("CheckSettleRegistartionFee", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    }
+                }
+                connection.closeConnection();
+                return user;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
         }
-    }
-    catch (Exception ex)
-    {
-        connection.closeConnection();
-        throw ex;
-    }
-}
+
+        public string EmailValidation(string Eamil)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("EmailValidation", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = Eamil;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                UsersDto user = new UsersDto();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        user.Id = (int)dt["UserID"];
+                        user.UserType = (int)dt["UserType"];
+                        user.FirstName = (string)dt["FirstName"];
+                        user.LastName = (string)dt["LastName"];
+                        user.Address = (string)dt["Address"];
+                        user.City = (string)dt["City"];
+                        user.DOB = (DateTime)dt["DOB"];
+                        user.ContactNumber = (int)dt["ContactNumber"];
+                        user.DepositAmount = (decimal)dt["DepositAmount"];
+                        user.Email = (string)dt["Email"];
+                        //user.Password = (string)dt["Password"];
+                        user.IsApproved = (int)dt["IsApproved"];
+                        user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                        user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    }
+                }
+                connection.closeConnection();
+                return user.Email;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
+        public List<UsersDto> GetBlackListedUsers()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetBlackListedUsers", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<UsersDto> Users = new List<UsersDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    //user.Password = (string)dt["Password"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+                    Users.Add(user);
+                }
+
+                return Users;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool RemoveBlackListUser(BlacklistUsersDto blacklistUser)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("RemoveBlackListUser", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = blacklistUser.UserId;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+
+                    connection.closeConnection();
+                    return this.UpdateUserBlacklisting(blacklistUser.UserId, false);
+
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
 
     }
 }
