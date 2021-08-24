@@ -10,7 +10,7 @@ INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2
 SELECT * FROM [dbo].[Item] where ItemID = @id
 </GetItem>
 <InsertItemBiddingDetail>
-INSERT INTO [dbo].[ItemBiddingDetails] VALUES (@ItemID,@StartingBid,@StartingDate, @EndingDate,@InspectionStartDate, @InspectionEndDate)
+	INSERT INTO [dbo].[ItemBiddingDetails] VALUES (@ItemID,@StartingBid,@StartingDate, @EndingDate,@InspectionStartDate, @InspectionEndDate, @HighestBid)
 </InsertItemBiddingDetail>
 <GetItemBiddingList>
 SELECT * FROM [dbo].[ItemBiddingDetails]

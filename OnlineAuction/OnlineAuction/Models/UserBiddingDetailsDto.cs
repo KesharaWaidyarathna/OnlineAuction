@@ -14,6 +14,7 @@ namespace OnlineAuction.DTO
         public int BidCount { get; set; }
         public DateTime InspectionDate { get; set; }
         public decimal BidValue { get; set; }
+        public decimal ReserveAmount { get; set; }
         public bool IsIncpectionApproved { get; set; }
         public bool IsCancelled { get; set; }
     }

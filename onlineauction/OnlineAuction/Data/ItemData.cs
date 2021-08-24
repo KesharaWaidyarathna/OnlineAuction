@@ -80,6 +80,7 @@ namespace OnlineAuction.Data
                         itemBiddin.BidEndDate = (DateTime)dt["EndingDate"];
                         itemBiddin.InspectionEndDate = (DateTime)dt["InspectionStartDate"];
                         itemBiddin.InspectionEndDate = (DateTime)dt["InspectionEndDate"];
+                        itemBiddin.HighestBid = (decimal)dt["HighestBid"];
                         itemBiddings.Add(itemBiddin);
                     }
                 }
@@ -186,6 +187,7 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@EndingDate", SqlDbType.DateTime).Value = itemBidding.BidEndDate;
                 command.Parameters.Add("@InspectionStartDate", SqlDbType.DateTime).Value = itemBidding.InspectionStartDate;
                 command.Parameters.Add("@InspectionEndDate", SqlDbType.DateTime).Value = itemBidding.InspectionEndDate;
+                command.Parameters.Add("@HighestBid", SqlDbType.Decimal).Value = itemBidding.StartingBid;
 
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)

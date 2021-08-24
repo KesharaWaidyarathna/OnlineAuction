@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Diagnostics;
 
 namespace OnlineAuction.Controllers
 {
@@ -207,13 +208,23 @@ namespace OnlineAuction.Controllers
         {
             try
             {
-                if (UserData.SaveUserBid(userBid))
+                // check user wallet balance
+                UsersDto usersDto = UserData.GetUser(userBid.UserId);
+
+                if (usersDto.DepositAmount != 0 && Decimal.Compare(usersDto.DepositAmount, Decimal.Multiply(userBid.BidValue, new Decimal(0.2))) != -1)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                    if (UserData.SaveUserBid(userBid))
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, "User Save Successfully");
+                    }
+                    else
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                    }
                 }
                 else
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User not save ");
+                    return Request.CreateErrorResponse(HttpStatusCode.PaymentRequired, "Insuffient balance!");
                 }
             }
             catch (Exception ex)
