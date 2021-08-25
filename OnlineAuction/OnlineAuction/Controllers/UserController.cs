@@ -275,6 +275,21 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/User/GetUserBidsByItemId")]
+        [HttpPost]
+        public HttpResponseMessage GetUserBidsByItemId([FromBody] UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                List<UserBiddingViewDetailsDto> userBiddingDetails = UserData.GetUserBidsByItemId(userBid);
+                return Request.CreateResponse(HttpStatusCode.OK, userBiddingDetails);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/User/SwitchToSeller")]
         [HttpPost]
         public HttpResponseMessage SwitchToSeller([FromBody] UsersDto user)

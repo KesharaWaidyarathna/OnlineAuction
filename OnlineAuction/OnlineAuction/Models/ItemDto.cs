@@ -20,6 +20,7 @@ namespace OnlineAuction.DTO
         public decimal SoldPrice { get; set; }
         public DateTime SoldDate { get; set; }
         public bool IsSold { get; set; }
+        public int UserId { get; set; }
 
     }
 }

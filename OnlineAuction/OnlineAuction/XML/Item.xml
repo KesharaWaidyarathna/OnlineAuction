@@ -3,8 +3,11 @@
 	<GetItemList>
 		SELECT * FROM [dbo].[Item]
 	</GetItemList>
+	<GetItemListByUserId>
+		SELECT * FROM [dbo].[Item] WHERE UserID = @UserID
+	</GetItemListByUserId>
 	<InsertItem>
-		INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @SoldPrice, @SoldDate,@Location, @IsSold)
+		INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @SoldPrice, @SoldDate,@Location, @IsSold, @UserID)
 	</InsertItem>
 	<GetItem>
 		SELECT * FROM [dbo].[Item] where ItemID = @id
@@ -15,6 +18,9 @@
 	<GetItemBiddingList>
 		SELECT * FROM [dbo].[ItemBiddingDetails]
 	</GetItemBiddingList>
+	<GetItemBiddingListByUser>
+		SELECT * FROM [dbo].[ItemBiddingDetails] ibd INNER JOIN [dbo].[Item] i ON ibd.ItemID = i.ItemID WHERE i.UserID = @UserID
+	</GetItemBiddingListByUser>
 	<GetLastItemId>
 		SELECT TOP 1 * FROM Item Order By ItemID DESC
 	</GetLastItemId>

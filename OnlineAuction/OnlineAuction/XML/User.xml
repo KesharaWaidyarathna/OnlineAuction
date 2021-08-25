@@ -40,6 +40,9 @@
 	<GetUserBidsByItem>
 		SELECT * FROM [dbo].[UserBiddingDetails] WHERE IsCanceled = 0 AND UserID = @UserID AND ItemID = @ItemID
 	</GetUserBidsByItem>
+	<GetUserBidsByItemId>
+		SELECT * FROM [dbo].[UserBiddingDetails] ubd INNER JOIN [dbo].[User] u ON ubd.UserID = u.UserID  WHERE IsCanceled = 0 AND ItemID = @ItemID
+	</GetUserBidsByItemId>
 	<CancelUserBid>
 		UPDATE [dbo].[UserBiddingDetails] SET IsCanceled = 1 WHERE ItemID = @ItemID AND UserID = @UserID
 	</CancelUserBid>

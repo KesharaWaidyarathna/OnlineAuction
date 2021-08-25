@@ -193,6 +193,7 @@
     <Compile Include="Models\ReturnOrderDetailsDto.cs" />
     <Compile Include="Models\UncommittedPaymentDetailsDto.cs" />
     <Compile Include="Models\UserBiddingDetailsDto.cs" />
+    <Compile Include="Models\UserBiddingViewDetailsDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
     <Compile Include="Models\UserPaymentDTO.cs" />
     <Compile Include="Models\UsersDto.cs" />

@@ -473,7 +473,7 @@ namespace OnlineAuction.Data
             try
             {
                 UserBiddingDetailsDto userBiddingDetails = this.GetUserBidsByItem(userBid);
-                Debug.WriteLine(userBiddingDetails.BidValue);
+
                 string query = QueryManager.LoadSqlFile("CancelUserBid", "User");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
@@ -482,9 +482,7 @@ namespace OnlineAuction.Data
                 connection.openConnection();
                 if (command.ExecuteNonQuery() == 1)
                 {
-                    Debug.WriteLine("sadasd");
                     connection.closeConnection();
-
 
                     ItemBiddingDetailsDto itemBiddingDetails = itemData.GetHighestBid(userBid.ItemId);
 
@@ -983,6 +981,58 @@ namespace OnlineAuction.Data
                 }
 
                 return userBiddingDetailsDto;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<UserBiddingViewDetailsDto> GetUserBidsByItemId(UserBiddingDetailsDto userBid)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetUserBidsByItemId", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userBid.ItemId;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+
+                List<UserBiddingViewDetailsDto> userBiddingDetails = new List<UserBiddingViewDetailsDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    UserBiddingDetailsDto userBiddingDetailsDto = new UserBiddingDetailsDto();
+                    UsersDto userDto = new UsersDto();
+
+                    userBiddingDetailsDto.Id = (int)dt["UserBiddingDetailId"];
+                    userBiddingDetailsDto.ItemId = (int)dt["ItemID"];
+                    userBiddingDetailsDto.UserId = (int)dt["UserID"];
+                    userBiddingDetailsDto.BidDate = (DateTime)dt["BidDate"];
+                    userBiddingDetailsDto.BidValue = (decimal)dt["BidValue"];
+                    userBiddingDetailsDto.ReserveAmount = (decimal)dt["ReserveAmount"];
+
+                    userDto.Id = (int)dt["UserID"];
+                    userDto.UserType = (int)dt["UserType"];
+                    userDto.FirstName = (string)dt["FirstName"];
+                    userDto.LastName = (string)dt["LastName"];
+                    userDto.Address = (string)dt["Address"];
+                    userDto.City = (string)dt["City"];
+                    userDto.DOB = (DateTime)dt["DOB"];
+                    userDto.ContactNumber = (int)dt["ContactNumber"];
+                    userDto.DepositAmount = (decimal)dt["DepositAmount"];
+                    userDto.Email = (string)dt["Email"];
+
+                    UserBiddingViewDetailsDto userBiddingViewDetails = new UserBiddingViewDetailsDto();
+                    userBiddingViewDetails.user = userDto;
+                    userBiddingViewDetails.userBiddingDetails = userBiddingDetailsDto;
+
+                    userBiddingDetails.Add(userBiddingViewDetails);
+                }
+
+                return userBiddingDetails;
 
             }
             catch (Exception ex)
