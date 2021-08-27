@@ -185,6 +185,37 @@ namespace OnlineAuction.Data
             }
         }
 
+        public bool SaveDispatchOrderDetails(DistpatchOrderDetailsDto distpatchOrderDetails)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("SaveDispatchOrderDetails", "Order");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = distpatchOrderDetails.ItemId;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = distpatchOrderDetails.Address;
+                command.Parameters.Add("@DeliveryCost", SqlDbType.Decimal).Value = distpatchOrderDetails.DeliveryCost;
+                command.Parameters.Add("@DeliveryDate", SqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                command.Parameters.Add("@IsDelivery", SqlDbType.Bit).Value = false;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public OrderPaymentDetailsDto GetOrderPaymentDetail(int OrderID)
         {
             try

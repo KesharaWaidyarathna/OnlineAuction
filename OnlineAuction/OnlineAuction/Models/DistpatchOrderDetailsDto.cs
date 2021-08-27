@@ -13,5 +13,6 @@ namespace OnlineAuction.DTO
         public decimal DeliveryCost { get; set; }
         public DateTime DeilverdDate { get; set; }
         public bool IsDeliverd { get; set; }
+        public int ItemId { get; set; }
     }
 }

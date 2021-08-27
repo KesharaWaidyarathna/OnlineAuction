@@ -47,13 +47,13 @@ namespace OnlineAuction.Controllers
 
         [Route("api/OrderDetail/SaveOrder")]
         [HttpPost]
-        public HttpResponseMessage SaveOrder([FromBody] OrderDetailsDto orderDetails,OrderPaymentDetailsDto orderPayment)
+        public HttpResponseMessage SaveOrder([FromBody] OrderDetailsDto orderDetails, OrderPaymentDetailsDto orderPayment)
         {
             try
             {
                 if (OrderData.SaveOrderDetail(orderDetails))
                 {
-                    OrderDetailsDto order = OrderData.GetOrder(orderDetails.UserId,orderDetails.ItemId);
+                    OrderDetailsDto order = OrderData.GetOrder(orderDetails.UserId, orderDetails.ItemId);
 
                     if (order != null)
                     {
@@ -69,6 +69,27 @@ namespace OnlineAuction.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Order not save Successfully");
                 }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [Route("api/OrderDetail/SaveDispatch")]
+        [HttpPost]
+        public HttpResponseMessage SaveDispatchOrderDetails([FromBody] DistpatchOrderDetailsDto distpatchOrderDetails)
+        {
+            try
+            {
+
+                if (OrderData.SaveDispatchOrderDetails(distpatchOrderDetails))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Order Save Successfully");
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Order not save Successfully");
+
             }
             catch (Exception ex)
             {
