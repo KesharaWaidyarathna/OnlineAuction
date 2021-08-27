@@ -104,6 +104,51 @@ namespace OnlineAuction.Data
 
         }
 
+        public List<ItemDto> GetItemListByUserBidded(UserBiddingDetailsDto userBiddingDetailsDto)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetItemListByUserBidded", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userBiddingDetailsDto.UserId;
+
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<ItemDto> Items = new List<ItemDto>();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        ItemDto item = new ItemDto();
+                        item.ItemId = (int)dt["ItemId"];
+                        item.CategoryId = (int)dt["CategoryId"];
+                        item.ItemName = (string)dt["Name"];
+                        item.ItemDiscription = (string)dt["Description"];
+                        item.ItemValue = (decimal)dt["Value"];
+                        item.Image1 = (string)dt["Image1"];
+                        item.Image2 = (string)dt["Image2"];
+                        item.Image3 = (string)dt["Image3"];
+                        item.Video = (string)dt["Video"];
+                        item.Location = (string)dt["Location"];
+                        item.SoldPrice = (decimal)dt["SoldPrice"];
+                        item.SoldDate = (DateTime)dt["SoldDate"];
+                        item.IsSold = (bool)dt["IsSold"];
+                        Items.Add(item);
+                    }
+
+                }
+                connection.closeConnection();
+                return Items;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public List<ItemBiddingDetailsDto> GetItemBiddingDetalList()
         {
             try
@@ -149,6 +194,46 @@ namespace OnlineAuction.Data
                 string query = QueryManager.LoadSqlFile("GetItemBiddingListByUser", "Item");
                 SqlCommand command = new SqlCommand(query, connection.GetConnection());
                 command.Parameters.Add("@UserID", SqlDbType.Int).Value = itemDto.UserId;
+
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<ItemBiddingDetailsDto> itemBiddings = new List<ItemBiddingDetailsDto>();
+                if (table.Rows.Count > 0)
+                {
+                    foreach (DataRow dt in table.Rows)
+                    {
+                        ItemBiddingDetailsDto itemBiddin = new ItemBiddingDetailsDto();
+                        itemBiddin.Id = (int)dt["ItemBiddingDetailId"];
+                        itemBiddin.ItemId = (int)dt["ItemID"];
+                        itemBiddin.StartingBid = (decimal)dt["StartingBid"];
+                        itemBiddin.BidStartDate = (DateTime)dt["StartingDate"];
+                        itemBiddin.BidEndDate = (DateTime)dt["EndingDate"];
+                        itemBiddin.InspectionEndDate = (DateTime)dt["InspectionStartDate"];
+                        itemBiddin.InspectionEndDate = (DateTime)dt["InspectionEndDate"];
+                        itemBiddin.HighestBid = (decimal)dt["HighestBid"];
+                        itemBiddings.Add(itemBiddin);
+                    }
+                }
+                connection.closeConnection();
+                return itemBiddings;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+
+        }
+
+        public List<ItemBiddingDetailsDto> GetItemBiddingListByUserBidded(UserBiddingDetailsDto userBiddingDetailsDto)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetItemBiddingListByUserBidded", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userBiddingDetailsDto.UserId;
 
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
                 DataTable table = new DataTable();

@@ -6,6 +6,9 @@
 	<GetItemListByUserId>
 		SELECT * FROM [dbo].[Item] WHERE UserID = @UserID
 	</GetItemListByUserId>
+	<GetItemListByUserBidded>
+		SELECT * FROM [dbo].[Item] i INNER JOIN [OnlineAuction].[dbo].[UserBiddingDetails] ubd ON ubd.ItemID = i.ItemID WHERE ubd.UserID = @UserID AND ubd.IsCanceled = 0
+	</GetItemListByUserBidded>
 	<InsertItem>
 		INSERT INTO [dbo].[Item]  VALUES (@Name,@CategoryID,@Description,@Image1,@Image2, @Image3, @Video, @Value, @SoldPrice, @SoldDate,@Location, @IsSold, @UserID)
 	</InsertItem>
@@ -21,6 +24,9 @@
 	<GetItemBiddingListByUser>
 		SELECT * FROM [dbo].[ItemBiddingDetails] ibd INNER JOIN [dbo].[Item] i ON ibd.ItemID = i.ItemID WHERE i.UserID = @UserID
 	</GetItemBiddingListByUser>
+	<GetItemBiddingListByUserBidded>
+		SELECT * FROM [dbo].[ItemBiddingDetails] ibd INNER JOIN [dbo].[Item] i ON ibd.ItemID = i.ItemID INNER JOIN [OnlineAuction].[dbo].[UserBiddingDetails] ubd ON ubd.ItemID = i.ItemID WHERE ubd.UserID = @UserID AND ubd.IsCanceled = 0
+	</GetItemBiddingListByUserBidded>
 	<GetLastItemId>
 		SELECT TOP 1 * FROM Item Order By ItemID DESC
 	</GetLastItemId>

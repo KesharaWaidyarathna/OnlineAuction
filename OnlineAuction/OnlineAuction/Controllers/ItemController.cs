@@ -72,6 +72,34 @@ namespace OnlineAuction.Controllers
 
         }
 
+        [Route("api/Item/GetItemListByUserBidded")]
+        [HttpPost]
+        public HttpResponseMessage GetItemListByUserBidded([FromBody] UserBiddingDetailsDto userBiddingDetailsDto)
+        {
+            try
+            {
+                ItemDetailListDTO itemDetailList = new ItemDetailListDTO();
+                List<ItemDto> items = itemData.GetItemListByUserBidded(userBiddingDetailsDto);
+                List<ItemBiddingDetailsDto> itemBiddings = itemData.GetItemBiddingListByUserBidded(userBiddingDetailsDto);
+                if (items.Count > 0 && itemBiddings.Count > 0)
+                {
+                    itemDetailList.Item = items;
+                    itemDetailList.itemBidding = itemBiddings;
+                    return Request.CreateResponse(HttpStatusCode.OK, itemDetailList);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No items to load");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
         [Route("api/Item/GetItem")]
         [HttpGet]
         public HttpResponseMessage GetItem([FromBody] int id)
@@ -153,7 +181,6 @@ namespace OnlineAuction.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
-
         }
 
     }
