@@ -439,6 +439,35 @@ namespace OnlineAuction.Data
             }
         }
 
+        public bool ReadyToDispatch(int itemId)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("ReadyToDispatch", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = itemId;
+
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public ItemBiddingDetailsDto GetItemBiddingDetailsByItemId(int itemId)
         {
             try
@@ -499,14 +528,15 @@ namespace OnlineAuction.Data
                 connection.closeConnection();
                 return Bids;
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 connection.closeConnection();
                 throw ex;
             }
         }
 
-        
+
 
         public ItemDto GetLastItemId()
         {

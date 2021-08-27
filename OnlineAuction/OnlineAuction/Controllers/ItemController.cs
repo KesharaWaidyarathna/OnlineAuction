@@ -163,6 +163,24 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/Item/ReadyToDispatch")]
+        [HttpPost]
+        public HttpResponseMessage ReadyToDispatch([FromBody] ItemDto itemDetail)
+        {
+            try
+            {
+                if (itemData.ReadyToDispatch(itemDetail.ItemId))
+                    return Request.CreateResponse(HttpStatusCode.OK, "Item Save Successfully");
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Item details not save ");
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/Item/GetItemAllBids")]
         [HttpGet]
         public HttpResponseMessage GetItemAllBids([FromBody] int ItemID)

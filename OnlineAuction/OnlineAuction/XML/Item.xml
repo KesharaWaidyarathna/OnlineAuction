@@ -36,4 +36,7 @@
 	<GetHighestBid>
 		SELECT * FROM [dbo].[ItemBiddingDetails] WHERE ItemID = @ItemID
 	</GetHighestBid>
+	<ReadyToDispatch>
+		UPDATE [dbo].[Item] SET IsSold = 1 WHERE ItemID = @ItemID
+	</ReadyToDispatch>
 </Item>
