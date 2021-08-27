@@ -536,7 +536,79 @@ namespace OnlineAuction.Data
             }
         }
 
+        public List<ReadyToDispatchItemDto> GetReadyToDispatchList()
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("GetReadyToDispatchList", "Item");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
 
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                DataTable table = new DataTable();
+                dataAdapter.Fill(table);
+                List<ReadyToDispatchItemDto> readyToDispatchItems = new List<ReadyToDispatchItemDto>();
+                foreach (DataRow dt in table.Rows)
+                {
+                    ReadyToDispatchItemDto readyToDispatchItem = new ReadyToDispatchItemDto();
+
+                    ItemDto item = new ItemDto();
+                    item.ItemId = (int)dt["ItemId"];
+                    item.CategoryId = (int)dt["CategoryId"];
+                    item.ItemName = (string)dt["Name"];
+                    item.ItemDiscription = (string)dt["Description"];
+                    item.ItemValue = (decimal)dt["Value"];
+                    item.Image1 = (string)dt["Image1"];
+                    item.Image2 = (string)dt["Image2"];
+                    item.Image3 = (string)dt["Image3"];
+                    item.Video = (string)dt["Video"];
+                    item.Location = (string)dt["Location"];
+                    item.SoldPrice = (decimal)dt["SoldPrice"];
+                    item.SoldDate = (DateTime)dt["SoldDate"];
+                    item.IsSold = (bool)dt["IsSold"];
+
+                    readyToDispatchItem.Item = item;
+
+                    ItemBiddingDetailsDto itemBiddin = new ItemBiddingDetailsDto();
+                    itemBiddin.Id = (int)dt["ItemBiddingDetailId"];
+                    itemBiddin.ItemId = (int)dt["ItemID"];
+                    itemBiddin.StartingBid = (decimal)dt["StartingBid"];
+                    itemBiddin.BidStartDate = (DateTime)dt["StartingDate"];
+                    itemBiddin.BidEndDate = (DateTime)dt["EndingDate"];
+                    itemBiddin.InspectionEndDate = (DateTime)dt["InspectionStartDate"];
+                    itemBiddin.InspectionEndDate = (DateTime)dt["InspectionEndDate"];
+                    itemBiddin.HighestBid = (decimal)dt["HighestBid"];
+
+                    readyToDispatchItem.ItemBidding = itemBiddin;
+
+                    UsersDto user = new UsersDto();
+                    user.Id = (int)dt["UserID"];
+                    user.UserType = (int)dt["UserType"];
+                    user.FirstName = (string)dt["FirstName"];
+                    user.LastName = (string)dt["LastName"];
+                    user.Address = (string)dt["Address"];
+                    user.City = (string)dt["City"];
+                    user.DOB = (DateTime)dt["DOB"];
+                    user.ContactNumber = (int)dt["ContactNumber"];
+                    user.DepositAmount = (decimal)dt["DepositAmount"];
+                    user.Email = (string)dt["Email"];
+                    user.IsApproved = (int)dt["IsApproved"];
+                    user.IsBlacklisted = (bool)dt["IsBlacklisted"];
+                    user.IsRegisterationFeePaid = (bool)dt["IsRegisterationFeePaid"];
+
+                    readyToDispatchItem.User = user;
+
+                    readyToDispatchItems.Add(readyToDispatchItem);
+                }
+                connection.closeConnection();
+                return readyToDispatchItems;
+
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
 
         public ItemDto GetLastItemId()
         {

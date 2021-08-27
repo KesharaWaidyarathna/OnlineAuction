@@ -181,6 +181,27 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/Item/GetReadyToDispatchList")]
+        [HttpGet]
+        public HttpResponseMessage GetReadyToDispatchList()
+        {
+            try
+            {
+                List<ReadyToDispatchItemDto> readyToDispatchItemDtos = itemData.GetReadyToDispatchList();
+
+                if (readyToDispatchItemDtos != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, readyToDispatchItemDtos);
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Request fail");
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+
         [Route("api/Item/GetItemAllBids")]
         [HttpGet]
         public HttpResponseMessage GetItemAllBids([FromBody] int ItemID)

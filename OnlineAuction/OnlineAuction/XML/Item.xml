@@ -39,4 +39,7 @@
 	<ReadyToDispatch>
 		UPDATE [dbo].[Item] SET IsSold = 1 WHERE ItemID = @ItemID
 	</ReadyToDispatch>
+	<GetReadyToDispatchList>
+		SELECT * FROM [dbo].[Item] i INNER JOIN [dbo].[ItemBiddingDetails] ibd ON ibd.ItemID = i.ItemID INNER JOIN [dbo].[UserBiddingDetails] ubd ON i.ItemID = ubd.ItemID INNER JOIN [dbo].[User] u ON u.UserID = ubd.UserID WHERE ibd.HighestBid = ubd.BidValue AND i.IsSold = 1 AND ubd.IsCanceled = 0
+	</GetReadyToDispatchList>
 </Item>

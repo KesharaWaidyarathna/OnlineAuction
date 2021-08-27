@@ -190,6 +190,7 @@
     <Compile Include="Models\OrderDetailsDto.cs" />
     <Compile Include="Models\OrderPaymentDetailsDto.cs" />
     <Compile Include="Models\PublicEnum.cs" />
+    <Compile Include="Models\ReadyToDispatchItemDto.cs" />
     <Compile Include="Models\ReturnOrderDetailsDto.cs" />
     <Compile Include="Models\UncommittedPaymentDetailsDto.cs" />
     <Compile Include="Models\UserBiddingDetailsDto.cs" />
