@@ -631,6 +631,35 @@ namespace OnlineAuction.Data
             }
         }
 
+        public bool PayFullAmountToBid(UserPaymentDTO userPayment)
+        {
+            try
+            {
+                string query = QueryManager.LoadSqlFile("PayFullAmountToBid", "User");
+                SqlCommand command = new SqlCommand(query, connection.GetConnection());
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userPayment.UserId;
+                command.Parameters.Add("@ItemID", SqlDbType.Int).Value = userPayment.ItemId;
+                command.Parameters.Add("@ReserveAmount", SqlDbType.Decimal).Value = userPayment.DepositAmount;
+
+                connection.openConnection();
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    connection.closeConnection();
+                    return true;
+                }
+                else
+                {
+                    connection.closeConnection();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                connection.closeConnection();
+                throw ex;
+            }
+        }
+
         public bool UserWalletReserve(UserPaymentDTO paymentDTO)
         {
             try

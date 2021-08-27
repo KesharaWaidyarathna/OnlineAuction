@@ -88,4 +88,7 @@
 	<GetHighestPlacedBidByItem>
 		SELECT ItemID, MAX(BidValue) AS BidValue FROM [OnlineAuction].[dbo].[UserBiddingDetails] WHERE ItemID = @ItemID AND IsCanceled = 0 GROUP BY ItemID
 	</GetHighestPlacedBidByItem>
+	<PayFullAmountToBid>
+		UPDATE [dbo].[UserBiddingDetails] SET ReserveAmount = @ReserveAmount WHERE IsCanceled = 0 AND ItemID = @ItemID AND UserID = @UserID
+	</PayFullAmountToBid>
 </User>

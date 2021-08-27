@@ -334,6 +334,27 @@ namespace OnlineAuction.Controllers
             }
         }
 
+        [Route("api/User/PayFullAmountToBid")]
+        [HttpPost]
+        public HttpResponseMessage PayFullAmountToBid([FromBody] UserPaymentDTO userPayment)
+        {
+            try
+            {
+                if (UserData.PayFullAmountToBid(userPayment))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "User Registration payment confirmd successfully");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "User Registration payment confirmd");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [Route("api/User/Wallet/TopUp")]
         [HttpPost]
         public HttpResponseMessage UserWalletTopUp([FromBody] UserPaymentDTO paymentDTO)
