@@ -18,4 +18,7 @@ SELECT * FROM [dbo].[ItemBiddingDetails]
 <GetLastItemId>
 SELECT TOP 1 * FROM Item Order By ItemID DESC
 </GetLastItemId>
+<GetExpiredItemList>
+SELECT I.* FROM [dbo].[Item] I Inner Join [dbo].[ItemBiddingDetails] ID ON I.ItemID=ID.ItemID WHERE ID.EndingDate &#60; GETDATE()
+</GetExpiredItemList>
 </Item>

@@ -61,9 +61,9 @@ namespace OnlineAuction.Controllers
                UsersDto blacklistUser = UserData.CheckBlacklist(users.Email);
                 string ValidEmail = UserData.EmailValidation(users.Email);
 
-                if (blacklistUser == null)
+                if (blacklistUser.Email == null)
                 {
-                    if (!String.IsNullOrEmpty(ValidEmail))
+                    if (String.IsNullOrEmpty(ValidEmail))
                     {
                         if (UserData.SaveUser(users))
                         {
@@ -133,7 +133,7 @@ namespace OnlineAuction.Controllers
             try
             {
                 UsersDto blacklistUser = UserData.CheckBlacklist(user.Email);
-                if (blacklistUser == null)
+                if (blacklistUser.Email == null)
                 {
                     UsersDto Authuser = UserData.UserLogin(user);
                     if (Authuser.Email == null)

@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using OnlineAuction.Data;
 using OnlineAuction.DTO;
+using OnlineAuction.Models;
 
 namespace OnlineAuction.Controllers
 {
@@ -47,18 +48,18 @@ namespace OnlineAuction.Controllers
 
         [Route("api/OrderDetail/SaveOrder")]
         [HttpPost]
-        public HttpResponseMessage SaveOrder([FromBody] OrderDetailsDto orderDetails,OrderPaymentDetailsDto orderPayment)
+        public HttpResponseMessage SaveOrder([FromBody] OrderDto orderDto)
         {
             try
             {
-                if (OrderData.SaveOrderDetail(orderDetails))
+                if (OrderData.SaveOrderDetail(orderDto.OrderDetailsDto))
                 {
-                    OrderDetailsDto order = OrderData.GetOrder(orderDetails.UserId,orderDetails.ItemId);
+                    OrderDetailsDto order = OrderData.GetOrder(orderDto.OrderDetailsDto.UserId, orderDto.OrderDetailsDto.ItemId);
 
                     if (order != null)
                     {
-                        orderPayment.OrderId = order.Id;
-                        if (OrderData.SaveOrderPaymentDetail(orderPayment))
+                        orderDto.OrderPaymentDetailsDto.OrderId = order.Id;
+                        if (OrderData.SaveOrderPaymentDetail(orderDto.OrderPaymentDetailsDto))
                         {
                             return Request.CreateResponse(HttpStatusCode.OK, order, "Order Save Successfully");
                         }

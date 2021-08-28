@@ -100,7 +100,6 @@ namespace OnlineAuction.Data
                 command.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = user.FirstName;
                 command.Parameters.Add("@LastName", SqlDbType.VarChar).Value = user.LastName;
                 command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
-                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = user.Address;
                 command.Parameters.Add("@City", SqlDbType.NVarChar).Value = user.City;
                 command.Parameters.Add("@DOB", SqlDbType.DateTime).Value = user.DOB;
                 command.Parameters.Add("@ContactNumber", SqlDbType.Int).Value = user.ContactNumber;

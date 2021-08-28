@@ -187,6 +187,7 @@
     <Compile Include="Models\ItemDto.cs" />
     <Compile Include="Models\MainConfigurationDto.cs" />
     <Compile Include="Models\OrderDetailsDto.cs" />
+    <Compile Include="Models\OrderDto.cs" />
     <Compile Include="Models\OrderPaymentDetailsDto.cs" />
     <Compile Include="Models\PublicEnum.cs" />
     <Compile Include="Models\ReturnOrderDetailsDto.cs" />

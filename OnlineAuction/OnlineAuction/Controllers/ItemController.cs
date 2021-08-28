@@ -32,7 +32,32 @@ namespace OnlineAuction.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, itemDetailList);
                 }
 
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,"No items to load");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound,"No items to load");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [Route("api/Item/GetExpiredItemList")]
+        [HttpGet]
+        public HttpResponseMessage GetExpiredItemList()
+        {
+            try
+            {
+                ItemDetailListDTO itemDetailList = new ItemDetailListDTO();
+                List<ItemDto> items = itemData.GetExpiredItemList();
+                List<ItemBiddingDetailsDto> itemBiddings = itemData.GetItemBiddingDetalList();
+                if (items.Count > 0 && itemBiddings.Count > 0)
+                {
+                    itemDetailList.Item = items;
+                    itemDetailList.itemBidding = itemBiddings;
+                    return Request.CreateResponse(HttpStatusCode.OK, itemDetailList);
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No items to load");
             }
             catch (Exception ex)
             {
